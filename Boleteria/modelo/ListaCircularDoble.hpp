@@ -9,10 +9,10 @@ public:
     ListaCircularDoble();
     ~ListaCircularDoble();
 
-    void insertarPorCabeza(int valor);
-    void eliminar(int valor);
-
-    Nodo* buscar(int valor);
+    void insertarPorCabeza(const Boleto& boleto);
+    
+    void eliminar(int numeroAsiento);
+    Nodo* buscar(int numeroAsiento);
 
     void mostrarDesdeInicio();
 

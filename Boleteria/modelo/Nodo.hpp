@@ -1,11 +1,12 @@
 #pragma once
-
+#include "Boleto.hpp"
 struct Nodo {
-    int dato;
-    Nodo *siguiente;
-    Nodo *anterior;
+    Boleto dato;
+    Nodo* siguiente;
+    Nodo* anterior;
 
-    Nodo(int valor) : dato (valor), 
+    Nodo(const Boleto& boleto) : 
+    dato (boleto), 
     siguiente (nullptr), 
     anterior (nullptr) {}
 };
