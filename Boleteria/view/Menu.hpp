@@ -9,11 +9,11 @@
 // --- Función para inicializar los asientos del evento ---
 void inicializarEvento(ListaCircularDoble& boleteria, int totalAsientos) {
     // Definir límites de zonas:
-    // Primeros 50% -> General
-    // Siguientes 25% -> Tribuna
-    // Últimos 25% -> Palco
+    // Primeros 50% General
+    // Siguientes 30% -> Tribuna
+    // Últimos 20% -> Palco
     int limiteGeneral = totalAsientos * 0.5; 
-    int limiteTribuna = totalAsientos * 0.75; 
+    int limiteTribuna = totalAsientos * 0.8; 
 
     for (int i = 1; i <= totalAsientos; i++) {
         

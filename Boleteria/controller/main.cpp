@@ -7,13 +7,12 @@
 
 using namespace std;
 
-// para compilar(ignoralo) g++ controller/main.cpp model/ListaCircularDoble.cpp utils/Validaciones.cpp -o Boleteria.exe
+// para compilar(ignoralo) - al readme
 
-// --- Función principal ---
 int main() {
     ListaCircularDoble miBoleteria;
 
-    inicializarEvento(miBoleteria, 5);
+    inicializarEvento(miBoleteria, 20);
     Persistencia::cargarReservas(miBoleteria);
     menuBoletosMain(miBoleteria);
     Persistencia::guardarReservas(miBoleteria);

@@ -6,40 +6,6 @@
 
 using namespace std;
 
-    // Función estática para leer enteros con validación
-    static int leerInt() {
-        const int INT_TAM = 12;
-        char ingreso[INT_TAM] = "";
-        char c;
-        int pos = 0;
-
-        do {
-            c = _getch();
-
-            // Permite números y el signo '-' solo al inicio
-            if (pos != INT_TAM - 1) {
-                if (('0' <= c && c <= '9') || (c == '-' && pos == 0)) {
-                    putchar(c);
-                    ingreso[pos] = c;
-                    ingreso[++pos] = '\0';
-                }
-            }
-
-            // Manejo de backspace
-            if ((c == '\b' || c == 127) && pos != 0) {
-                putchar('\b');
-                putchar(' ');
-                putchar('\b');
-                ingreso[--pos] = '\0';
-            }
-        } while ((c != '\n' && c != '\r') || pos == 0);
-
-        putchar('\n');
-        return atoi(ingreso);
-    }
-
-// Funciones libres para validaciones
-
 bool validarEntero(string numero) {
     int inicio = 0;
     if (numero.length() == 0) {
@@ -97,31 +63,43 @@ int ingresarEntero() {
 }
 
 string ingresarLetra() {
-    string palabra;
+    string p = "";
+    int esp = 0;
     char c;
-    while (true) {
-        palabra.clear();
-        while (true) {
-            c = _getch();
 
-            if (c == 13) break;  // Enter
-            else if (c == 8) {   // Backspace
-                if (!palabra.empty()) {
-                    palabra.pop_back();
-                    cout << "\b \b";
-                }
-            }
-            else if (isalpha(c) || isspace(c)) {
-                palabra.push_back(c);
-                cout << c;
-            }
+    while (true) {
+        c = _getch(); 
+
+        if (c == 0 || c == -32) {
+            _getch(); 
+            continue; 
         }
 
-        if (!palabra.empty()) break;
-        else cout << "\nNo se permiten cadenas vacias. Intente de nuevo: ";
+        /// ENTER ///
+        if (c == 13 && !p.empty()) { 
+            if (p.back() == ' ') { p.pop_back(); cout << "\b \b"; } // Limpieza final
+            break; 
+        }
+        // BACKSPACE //
+        else if (c == 8 && !p.empty()) { 
+            if (p.back() == ' ') esp--; 
+            p.pop_back(); 
+            cout << "\b \b";
+        }
+        /// LETRAS (Solo alfabéticas) ///
+        else if (isalpha(c)) { 
+            p += c; 
+            cout << c;
+        }
+        // ESPACIO (máx 3 espacios) //
+        else if (c == ' ' && !p.empty() && p.back() != ' ' && esp < 3) {
+            p += c; 
+            cout << c;
+            esp++;
+        }
     }
     cout << endl;
-    return palabra;
+    return p;
 }
 
 bool validarCedula(string cedula) {
