@@ -10,6 +10,7 @@ public:
     ~ListaCircularDoble();
 
     void insertarPorCabeza(const Boleto& boleto);
+    void insertarPorFinal(const Boleto& boleto);    
     
     void eliminar(int numeroAsiento);
     Nodo* buscar(int numeroAsiento);

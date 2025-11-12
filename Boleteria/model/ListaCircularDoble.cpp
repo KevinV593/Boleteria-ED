@@ -54,6 +54,27 @@ void ListaCircularDoble::insertarPorCabeza(const Boleto& boleto) {
     }
 }
 
+void ListaCircularDoble::insertarPorFinal(const Boleto& boleto) {
+    Nodo* nuevoNodo = new Nodo(boleto);
+
+    if (estaVacia()) {
+        // Caso lista vacía: igual que antes
+        cabeza = nuevoNodo;
+        nuevoNodo->siguiente = cabeza;
+        nuevoNodo->anterior = cabeza;
+    } else {
+
+        Nodo* cola = cabeza->anterior; 
+        
+        nuevoNodo->siguiente = cabeza;  
+        nuevoNodo->anterior = cola;     
+        
+        cola->siguiente = nuevoNodo;    
+        cabeza->anterior = nuevoNodo;   
+
+    }
+}
+
 // --- Implementación de Eliminar (Corregida) ---
 void ListaCircularDoble::eliminar(int numeroAsiento) {
     

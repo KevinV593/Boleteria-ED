@@ -1,8 +1,10 @@
 #include <iostream>
 #include <conio.h>
 #include <windows.h>
-#include "../modelo/ListaCircularDoble.hpp"
-#include "../Vista/Menu.hpp"
+#include "../model/ListaCircularDoble.hpp"
+#include "../model/TipoAsiento.hpp"
+
+#include "../view/Menu.hpp"
 
 using namespace std;
 

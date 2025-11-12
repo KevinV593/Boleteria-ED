@@ -3,22 +3,39 @@
 #include <windows.h>
 #include <string>
 #include <limits>
-#include "../modelo/Boleto.hpp"
-#include "../modelo/ListaCircularDoble.hpp"
+#include "../model/TipoAsiento.hpp"
+#include "../model/Boleto.hpp"
+#include "../model/ListaCircularDoble.hpp"
 
 // --- Función para inicializar los asientos del evento ---
 void inicializarEvento(ListaCircularDoble& boleteria, int totalAsientos) {
-    for (int i = totalAsientos; i >= 1; i--) {
-        boleteria.insertarPorCabeza(Boleto(i));
+    // Definir límites de zonas:
+    // Primeros 50% -> General
+    // Siguientes 25% -> Tribuna
+    // Últimos 25% -> Palco
+    int limiteGeneral = totalAsientos * 0.5; 
+    int limiteTribuna = totalAsientos * 0.75; 
+
+    for (int i = 1; i <= totalAsientos; i++) {
+        
+        TipoAsiento categoria;
+
+        if (i <= limiteGeneral) {
+            categoria = GENERAL;
+        } else if (i <= limiteTribuna) {
+            categoria = TRIBUNA;
+        } else {
+            categoria = PALCO;
+        }
+
+        boleteria.insertarPorFinal(Boleto(i, categoria));
     }
 }
 
-// --- Función para limpiar el buffer de cin ---
 void limpiarBufferCin() {
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-// --- Menú principal con navegación rápida usando _getch() ---
 void menuBoletosMain(ListaCircularDoble& miBoleteria) {
     bool menu = true;
     while (menu) {
@@ -51,6 +68,9 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
                     cout << "Error: El asiento ya esta ocupado por " 
                          << nodoBuscado->dato.nombreCliente << "." << endl;
                 } else {
+                    cout<< "Asiento encontrado.";
+                    cout << endl;
+
                     cout << "Ingrese el nombre del cliente: ";
                     string nombre;
                     getline(cin, nombre);
