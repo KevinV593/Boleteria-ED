@@ -142,7 +142,7 @@ if (estaVacia()) {
     Nodo* actual = cabeza;
     cout << "Asientos del Evento:\n";
     do {
-        actual->dato.mostrarDatos();
+        actual->dato.mostrarAsiento();
         cout << "\n"; 
         actual = actual->siguiente;
     } while (actual != cabeza);
@@ -150,4 +150,4 @@ if (estaVacia()) {
 
 Nodo* ListaCircularDoble::getCabeza() {
     return cabeza;
-}
+};

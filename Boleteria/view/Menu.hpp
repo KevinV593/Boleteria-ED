@@ -121,29 +121,29 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             case 4: { // Buscar por Cedula
             system("cls");
             cout << "--- BUSCAR RESERVA---" << endl << endl;
+            
+            cout << "Ingrese la cedula a buscar: ";
             string cedula = ingresarCedula();
 
-                if (miBoleteria.estaVacia()) {
+            if (miBoleteria.estaVacia()) {
                     cout << "No hay asientos registrados." << endl;
                 } 
-                else {
-                    Nodo* actual = miBoleteria.getCabeza(); 
-                    bool encontrado = false;
 
+            else {
+                Nodo* actual = miBoleteria.getCabeza(); 
+                bool encontrado = false;
+
+                    cout<< "\nResultados de Busqueda:\n";
                     do {
                         if (actual->dato.estaOcupado && actual->dato.cedulaCliente == cedula) {
                             cout << "\n--- Asiento Encontrado ---\n";
-                            cout << "Numero de Asiento: " << actual->dato.numeroAsiento << "\n";
-                            cout << "Tipo de Asiento: " << actual->dato.getCategoria() << "\n";
-                            cout << "Nombre del Cliente: " << actual->dato.nombreCliente << "\n";
-                            cout << "Cedula del Cliente: " << actual->dato.cedulaCliente << "\n";
-                            cout << "ID: " << actual->dato.id << "\n";
+                            actual->dato.mostrarDatos();
+                            cout<<endl;
                             encontrado = true;
-                            break;
                         }
                         actual = actual->siguiente;
                     } while (actual != miBoleteria.getCabeza());
-
+                    
                     if (!encontrado) {
                         cout << "No se encontro un asiento reservado con la cedula " << cedula << ".\n";
                     }
