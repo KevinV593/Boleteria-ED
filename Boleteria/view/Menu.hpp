@@ -6,6 +6,8 @@
 #include "../model/TipoAsiento.hpp"
 #include "../model/Boleto.hpp"
 #include "../model/ListaCircularDoble.hpp"
+#include "../utils/Validaciones.hpp" 
+
 
 // --- Función para inicializar los asientos del evento ---
 void inicializarEvento(ListaCircularDoble& boleteria, int totalAsientos) {
@@ -56,10 +58,9 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
         switch (opcion) {
             case 1: { // Reservar Asiento
+                cout << "///    RESERVAR    ///";
                 cout << "Ingrese el numero de asiento a reservar: ";
-                int numAsiento = 0;
-                cin >> numAsiento;
-                limpiarBufferCin();
+                int numAsiento = Validaciones::leerInt();
 
                 Nodo* nodoBuscado = miBoleteria.buscar(numAsiento);
                 if (nodoBuscado == nullptr) {
@@ -83,7 +84,7 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
             case 2: { // Cancelar Reserva
                 cout << "Ingrese el numero de asiento a cancelar: ";
-                int numAsiento = 0;
+                int numAsiento = Validaciones::leerInt();
                 cin >> numAsiento;
                 limpiarBufferCin();
 
@@ -116,4 +117,4 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             }
         }
     }
-}
+};
