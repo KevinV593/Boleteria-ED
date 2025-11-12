@@ -1,13 +1,10 @@
 #include <iostream>
-#include <conio.h>
-#include <windows.h>
-#include <string>
 #include <limits>
 #include "../model/TipoAsiento.hpp"
 #include "../model/Boleto.hpp"
 #include "../model/ListaCircularDoble.hpp"
 #include "../utils/Validaciones.hpp" 
-
+#include "../utils/Persistencia.hpp" 
 
 // --- Función para inicializar los asientos del evento ---
 void inicializarEvento(ListaCircularDoble& boleteria, int totalAsientos) {
@@ -84,6 +81,7 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
                     cout << "Asiento " << numAsiento << " reservado a " << nombre 
                          << " (Cedula: " << cedula << ")" << endl;
                 }
+                Persistencia::guardarReservas(miBoleteria);
                 system("pause");
                 break;
             }
@@ -105,6 +103,7 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
                     cout << "Reserva de " << nombreCliente << " (Cedula: " << cedulaCliente << ")"
                         << " en asiento " << numAsiento << " cancelada" << endl;
                 }
+                Persistencia::guardarReservas(miBoleteria);
                 system("pause");
                 break;
             }
@@ -138,7 +137,7 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
                         if (actual->dato.estaOcupado && actual->dato.cedulaCliente == cedula) {
                             cout << "\n--- Asiento Encontrado ---\n";
                             actual->dato.mostrarDatos();
-                            cout<<endl;
+                            cout<<endl<<endl;
                             encontrado = true;
                         }
                         actual = actual->siguiente;

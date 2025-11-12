@@ -1,0 +1,5 @@
+1;General;Ilhan ;1754144390;12/11/2025;01:51:04;1
+2;General;N/A;N/A;N/A;N/A;0
+3;Tribuna;N/A;N/A;N/A;N/A;0
+4;Palco;N/A;N/A;N/A;N/A;0
+5;Palco;N/A;N/A;N/A;N/A;0
