@@ -7,6 +7,8 @@
 
 using namespace std;
 
+// para compilar(ignoralo) g++ controller/main.cpp model/ListaCircularDoble.cpp utils/Validaciones.cpp view/Menu.hpp -o Boleteria.exe
+
 // --- Función principal ---
 int main() {
     ListaCircularDoble miBoleteria;
