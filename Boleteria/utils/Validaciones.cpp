@@ -6,8 +6,6 @@
 
 using namespace std;
 
-class Validaciones {
-public:
     // Función estática para leer enteros con validación
     static int leerInt() {
         const int INT_TAM = 12;
@@ -39,7 +37,6 @@ public:
         putchar('\n');
         return atoi(ingreso);
     }
-};
 
 // Funciones libres para validaciones
 

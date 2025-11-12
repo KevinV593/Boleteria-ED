@@ -48,11 +48,12 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
         cout << "[1] Reservar Asiento" << endl;
         cout << "[2] Cancelar Reserva" << endl;
         cout << "[3] Mostrar Asientos" << endl;
-        cout << "[4] Salir" << endl;
+        cout << "[4] Buscar Reserva" << endl;
+        cout << "[5] Salir" << endl;
 
         int opcion = _getch() - '0'; // Convertir char a número
 
-        if (opcion < 1 || opcion > 4) {
+        if (opcion < 1 || opcion > 5) {
             cout << "\nOpcion no valida\n";
             Sleep(500); // Pausa corta para que el usuario vea el mensaje
             continue;
@@ -117,7 +118,41 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
                 break;
             }
 
-            case 4: { // Salir
+            case 4: { // Buscar por Cedula
+            system("cls");
+            cout << "--- BUSCAR RESERVA---" << endl << endl;
+            string cedula = ingresarCedula();
+
+            if (miBoleteria.estaVacia()) {
+                cout << "No hay asientos registrados." << endl;
+            } 
+            else {
+                Nodo* actual = miBoleteria.getCabeza(); 
+                bool encontrado = false;
+
+                do {
+                    if (actual->dato.estaOcupado && actual->dato.cedulaCliente == cedula) {
+                        cout << "\n--- Asiento Encontrado ---\n";
+                        cout << "Numero de Asiento: " << actual->dato.numeroAsiento << "\n";
+                        cout << "Tipo de Asiento: " << actual->dato.getCategoria() << "\n";
+                        cout << "Nombre del Cliente: " << actual->dato.nombreCliente << "\n";
+                        cout << "Cedula del Cliente: " << actual->dato.cedulaCliente << "\n";
+                        cout << "ID: " << actual->dato.id << "\n";
+                        encontrado = true;
+                        break;
+                    }
+                    actual = actual->siguiente;
+                } while (actual != miBoleteria.getCabeza());
+
+                if (!encontrado) {
+                    cout << "No se encontro un asiento reservado con la cedula " << cedula << ".\n";
+                }
+            }
+            system("pause");
+            break;
+            }
+
+            case 5: { // Salir
                 menu = false;
                 system("cls");
                 cout << "Gracias por usar el sistema." << endl;

@@ -147,3 +147,7 @@ if (estaVacia()) {
         actual = actual->siguiente;
     } while (actual != cabeza);
 }
+
+Nodo* ListaCircularDoble::getCabeza() {
+    return cabeza;
+}
