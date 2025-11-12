@@ -46,7 +46,7 @@ public:
         cout << "\t- Asiento: " << numeroAsiento;
         cout << "\t- Categoria: " << getCategoria();
         if (estaOcupado) {
-            cout << " - RESERVADO: " << nombreCliente << ")" << " | Cédula: " << cedulaCliente << ")";;
+            cout << "\t - RESERVADO ";
         } else {
             cout << "\t - DISPONIBLE";
         }

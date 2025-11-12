@@ -41,8 +41,10 @@ void limpiarBufferCin() {
 void menuBoletosMain(ListaCircularDoble& miBoleteria) {
     bool menu = true;
     while (menu) {
-        system("cls"); // Limpia la pantalla
-        cout << "--- BOLETERIA DE EVENTO ---" << endl;
+    system("cls"); // Limpia la pantalla
+        cout << "****************************" << endl;
+        cout << "*    RESERVA DE BOLETOS    *" << endl;
+        cout << "****************************" << endl;
         cout << "[1] Reservar Asiento" << endl;
         cout << "[2] Cancelar Reserva" << endl;
         cout << "[3] Mostrar Asientos" << endl;
@@ -58,7 +60,8 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
         switch (opcion) {
            case 1: { // Reservar Asiento
-            cout << "///    RESERVAR    ///" << endl;
+           system("cls");
+            cout << "///    RESERVAR    ///" << endl << endl;
                 cout << "Ingrese el numero de asiento a reservar: ";
                 int numAsiento = ingresarEntero();
 
@@ -66,9 +69,7 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
                 if (nodoBuscado == nullptr) {
                     cout << "Error: El asiento " << numAsiento << " no existe." << endl;
                 } else if (nodoBuscado->dato.estaOcupado) {
-                    cout << "Error: El asiento ya esta ocupado por " 
-                        << nodoBuscado->dato.nombreCliente 
-                        << " (Cedula: " << nodoBuscado->dato.cedulaCliente << ")." << endl;
+                    cout << "Error: Este asiento no esta disponible para reservar" << endl;
                 } else {
                     cout << "Asiento encontrado." << endl;
 
@@ -80,15 +81,16 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
                     nodoBuscado->dato.reservar(nombre, cedula);
                     cout << "Asiento " << numAsiento << " reservado a " << nombre 
-                        << " (Cedula: " << cedula << ")" << endl;
+                         << " (Cedula: " << cedula << ")" << endl;
                 }
                 system("pause");
                 break;
             }
 
             case 2: { // Cancelar Reserva
+            system("cls");
                 cout << "Ingrese el numero de asiento a cancelar: ";
-                int numAsiento = leerInt();
+                int numAsiento = ingresarEntero();
 
                 Nodo* nodoBuscado = miBoleteria.buscar(numAsiento);
                 if (nodoBuscado == nullptr) {
@@ -108,7 +110,8 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
 
             case 3: { // Mostrar Asientos
-                cout << "\n--- Estado Actual de Asientos ---" << endl;
+            system("cls");
+                cout << "\n--- Estado Actual de Asientos ---" << endl << endl;
                 miBoleteria.mostrarDesdeInicio();
                 system("pause");
                 break;
@@ -116,6 +119,7 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
             case 4: { // Salir
                 menu = false;
+                system("cls");
                 cout << "Gracias por usar el sistema." << endl;
                 break;
             }
