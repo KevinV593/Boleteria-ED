@@ -88,7 +88,7 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
             case 2: { // Cancelar Reserva
                 cout << "Ingrese el numero de asiento a cancelar: ";
-                int numAsiento = ingresarEntero();
+                int numAsiento = leerInt();
 
                 Nodo* nodoBuscado = miBoleteria.buscar(numAsiento);
                 if (nodoBuscado == nullptr) {

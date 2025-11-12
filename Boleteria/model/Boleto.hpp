@@ -38,19 +38,15 @@ public:
     }
 
     string getCategoria() {
-        switch(categoria) {
-            case GENERAL: return "General";
-            case TRIBUNA: return "Tribuna";
-            case PALCO: return "Palco";
-            default: return "N/A";
-        }
+        return NOMBRES_CATEGORIA[categoria];
     }
+
     void mostrarDatos() {
         cout << "[" << id << "]";
         cout << "\t- Asiento: " << numeroAsiento;
         cout << "\t- Categoria: " << getCategoria();
         if (estaOcupado) {
-            cout << " - RESERVADO (: " << nombreCliente << ")" << " | Cédula: " << cedulaCliente << ")";;
+            cout << " - RESERVADO: " << nombreCliente << ")" << " | Cédula: " << cedulaCliente << ")";;
         } else {
             cout << "\t - DISPONIBLE";
         }
