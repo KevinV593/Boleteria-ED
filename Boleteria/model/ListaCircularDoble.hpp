@@ -14,6 +14,8 @@ public:
     
     void eliminar(int numeroAsiento);
     Nodo* buscar(int numeroAsiento);
+    Nodo* buscarPorID(const string& idIngresada);
+
 
     void mostrarDesdeInicio();
 

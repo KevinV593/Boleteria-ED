@@ -12,14 +12,17 @@ public:
     string nombreCliente;
     bool estaOcupado;
     TipoAsiento categoria;
+    string id;
     
     Boleto(int num, TipoAsiento cat) : 
         numeroAsiento(num), 
         categoria(cat), 
         nombreCliente("N/A"), 
         estaOcupado(false) {
+            string prefijo = PREFIJOS_CODIGO[categoria];
+            this->id = prefijo + "-" + to_string(numeroAsiento);
     }
-
+    
     void reservar(string cliente) {
         nombreCliente = cliente;
         estaOcupado = true;
@@ -34,17 +37,18 @@ public:
         switch(categoria) {
             case GENERAL: return "General";
             case TRIBUNA: return "Tribuna";
-            case PALCO:   return "Palco";
-            default:      return "N/A";
+            case PALCO: return "Palco";
+            default: return "N/A";
         }
     }
     void mostrarDatos() {
-        cout << "[Asiento " << numeroAsiento << "]";
-        cout << " - Categoria: " << getCategoria();
+        cout << "[" << id << "]";
+        cout << "\t- Asiento: " << numeroAsiento;
+        cout << "\t- Categoria: " << getCategoria();
         if (estaOcupado) {
-            cout << " - RESERVADO (: " << nombreCliente << ")";
+            cout << "\t- RESERVADO: " << nombreCliente;
         } else {
-            cout << " - (DISPONIBLE)";
+            cout << "\t - DISPONIBLE";
         }
     }
 };
