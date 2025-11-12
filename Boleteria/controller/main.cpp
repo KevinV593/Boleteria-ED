@@ -11,8 +11,9 @@ using namespace std;
 
 int main() {
     ListaCircularDoble miBoleteria;
-
-    inicializarEvento(miBoleteria, 20);
+    
+    int numeroTotalDeAsientos = 20; //Parametro a Eleguir
+    inicializarEvento(miBoleteria, numeroTotalDeAsientos);
     Persistencia::cargarReservas(miBoleteria);
     menuBoletosMain(miBoleteria);
     Persistencia::guardarReservas(miBoleteria);
