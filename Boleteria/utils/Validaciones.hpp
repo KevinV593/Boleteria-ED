@@ -1,12 +1,16 @@
 #pragma once
-
-// Si usas string en el futuro, incluye esto, si no, para int no es estricto.
 #include <string>
 
-class Validaciones
-{
-public:
-    // Declaración de la función estática
-    static int leerInt();
+using namespace std;
 
+class Validaciones {
+public:
+    static int leerInt();
 };
+
+//funciones libres (sacadas del archivo de validaciones anterior)
+int ingresarEntero();
+string ingresarLetra();
+bool validarCedula(const string& cedula);
+string ingresarCedula();
+char* ingresar(char* msj);

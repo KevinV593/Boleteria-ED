@@ -3,7 +3,6 @@
 #include <windows.h>
 #include "../model/ListaCircularDoble.hpp"
 #include "../model/TipoAsiento.hpp"
-
 #include "../view/Menu.hpp"
 
 using namespace std;
