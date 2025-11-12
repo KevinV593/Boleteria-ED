@@ -123,33 +123,33 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             cout << "--- BUSCAR RESERVA---" << endl << endl;
             string cedula = ingresarCedula();
 
-            if (miBoleteria.estaVacia()) {
-                cout << "No hay asientos registrados." << endl;
-            } 
-            else {
-                Nodo* actual = miBoleteria.getCabeza(); 
-                bool encontrado = false;
+                if (miBoleteria.estaVacia()) {
+                    cout << "No hay asientos registrados." << endl;
+                } 
+                else {
+                    Nodo* actual = miBoleteria.getCabeza(); 
+                    bool encontrado = false;
 
-                do {
-                    if (actual->dato.estaOcupado && actual->dato.cedulaCliente == cedula) {
-                        cout << "\n--- Asiento Encontrado ---\n";
-                        cout << "Numero de Asiento: " << actual->dato.numeroAsiento << "\n";
-                        cout << "Tipo de Asiento: " << actual->dato.getCategoria() << "\n";
-                        cout << "Nombre del Cliente: " << actual->dato.nombreCliente << "\n";
-                        cout << "Cedula del Cliente: " << actual->dato.cedulaCliente << "\n";
-                        cout << "ID: " << actual->dato.id << "\n";
-                        encontrado = true;
-                        break;
+                    do {
+                        if (actual->dato.estaOcupado && actual->dato.cedulaCliente == cedula) {
+                            cout << "\n--- Asiento Encontrado ---\n";
+                            cout << "Numero de Asiento: " << actual->dato.numeroAsiento << "\n";
+                            cout << "Tipo de Asiento: " << actual->dato.getCategoria() << "\n";
+                            cout << "Nombre del Cliente: " << actual->dato.nombreCliente << "\n";
+                            cout << "Cedula del Cliente: " << actual->dato.cedulaCliente << "\n";
+                            cout << "ID: " << actual->dato.id << "\n";
+                            encontrado = true;
+                            break;
+                        }
+                        actual = actual->siguiente;
+                    } while (actual != miBoleteria.getCabeza());
+
+                    if (!encontrado) {
+                        cout << "No se encontro un asiento reservado con la cedula " << cedula << ".\n";
                     }
-                    actual = actual->siguiente;
-                } while (actual != miBoleteria.getCabeza());
-
-                if (!encontrado) {
-                    cout << "No se encontro un asiento reservado con la cedula " << cedula << ".\n";
                 }
-            }
-            system("pause");
-            break;
+                system("pause");
+                break;
             }
 
             case 5: { // Salir
