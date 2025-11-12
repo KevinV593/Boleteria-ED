@@ -6,6 +6,7 @@
 #include "../model/TipoAsiento.hpp"
 #include "../model/Boleto.hpp"
 #include "../model/ListaCircularDoble.hpp"
+#include "../utils/Validacion.h"
 
 // --- Función para inicializar los asientos del evento ---
 void inicializarEvento(ListaCircularDoble& boleteria, int totalAsientos) {
@@ -57,24 +58,23 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
         switch (opcion) {
             case 1: { // Reservar Asiento
                 cout << "Ingrese el numero de asiento a reservar: ";
-                int numAsiento = 0;
-                cin >> numAsiento;
-                limpiarBufferCin();
+                int numAsiento = ingresarEntero();
 
                 Nodo* nodoBuscado = miBoleteria.buscar(numAsiento);
                 if (nodoBuscado == nullptr) {
                     cout << "Error: El asiento " << numAsiento << " no existe." << endl;
                 } else if (nodoBuscado->dato.estaOcupado) {
                     cout << "Error: El asiento ya esta ocupado por " 
-                         << nodoBuscado->dato.nombreCliente << "." << endl;
+                         << nodoBuscado->dato.nombreCliente << " (Cedula: " << nodoBuscado->dato.cedulaCliente << ")." << endl;
                 } else {
                     cout<< "Asiento encontrado.";
                     cout << endl;
 
                     cout << "Ingrese el nombre del cliente: ";
-                    string nombre;
-                    getline(cin, nombre);
-                    nodoBuscado->dato.reservar(nombre);
+                    string nombre = ingresarLetra();
+                    cout << "Ingrese la cedula del cliente: ";
+                    string cedula = ingresarCedula();
+                    nodoBuscado->dato.reservar(nombre, cedula);
                     cout << "Asiento " << numAsiento << " reservado a " << nombre << "" << endl;
                 }
                 system("pause");
@@ -83,9 +83,7 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
             case 2: { // Cancelar Reserva
                 cout << "Ingrese el numero de asiento a cancelar: ";
-                int numAsiento = 0;
-                cin >> numAsiento;
-                limpiarBufferCin();
+                int numAsiento = ingresarEntero();
 
                 Nodo* nodoBuscado = miBoleteria.buscar(numAsiento);
                 if (nodoBuscado == nullptr) {
@@ -94,8 +92,9 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
                     cout << "Info: El asiento " << numAsiento << " ya estaba libre." << endl;
                 } else {
                     string nombreCliente = nodoBuscado->dato.nombreCliente;
+                    string cedulaCliente = nodoBuscado->dato.cedulaCliente; 
                     nodoBuscado->dato.cancelar();
-                    cout << "Reserva de " << nombreCliente << " en asiento " 
+                    cout << "Reserva de " << nombreCliente << " (Cedula: " << cedulaCliente << ")" << " en asiento " 
                          << numAsiento << " cancelada" << endl;
                 }
                 system("pause");
