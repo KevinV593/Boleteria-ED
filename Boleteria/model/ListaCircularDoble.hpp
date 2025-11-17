@@ -14,6 +14,7 @@ public:
     
     void eliminar(int numeroAsiento);
     Nodo* buscar(int numeroAsiento);
+    Nodo* buscar(string cedula);
     Nodo* buscarPorID(const string& idIngresada);
 
 
