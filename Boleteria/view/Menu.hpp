@@ -1,6 +1,3 @@
-// CODIGO COMPLETO ACTUALIZADO CON CONFIRMACIONES 1/0 VALIDADAS
-// SOLO SE USA pedirConfirmacion(); NO SE AGREGA NINGUNA FUNCION EXTRA
-
 #include <iostream>
 #include <limits>
 #include "../model/TipoAsiento.hpp"
@@ -46,10 +43,6 @@ string obtenerNombrePorCedula(ListaCircularDoble& lista, const string& cedula) {
     return "";
 }
 
-void limpiarBufferCin() {
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
-}
-
 int pedirConfirmacion(const string& mensaje) {
     int opcion;
     while (true) {
@@ -60,6 +53,175 @@ int pedirConfirmacion(const string& mensaje) {
     }
 }
 
+// Necesario para la función tolower
+#include <cctype> 
+
+// Estructura auxiliar para manejar cada letra como un nodo
+struct NodoLetra {
+    char letra;
+    NodoLetra* siguiente;
+};
+
+void agregarLetra(NodoLetra*& cabeza, NodoLetra*& fin, char c) {
+    NodoLetra* nuevo = new NodoLetra;
+    nuevo->letra = c;
+    nuevo->siguiente = nullptr;
+
+    if (cabeza == nullptr) {
+        cabeza = nuevo;
+        fin = nuevo;
+    } else {
+        fin->siguiente = nuevo;
+        fin = nuevo;
+    }
+}
+
+// AYUDA: Ordena una lista enlazada dada (Burbuja)
+void ordenarSubLista(NodoLetra* cabeza) {
+    if (cabeza == nullptr) return;
+
+    bool ordenado = false;
+    while (!ordenado) {
+        ordenado = true;
+        NodoLetra* actual = cabeza;
+
+        while (actual->siguiente != nullptr) {
+            // Comparamos en minúsculas
+            char c1 = tolower(actual->letra);
+            char c2 = tolower(actual->siguiente->letra);
+
+            if (c1 > c2) {
+                // Swap de datos
+                char temp = actual->letra;
+                actual->letra = actual->siguiente->letra;
+                actual->siguiente->letra = temp;
+                ordenado = false;
+            }
+            actual = actual->siguiente;
+        }
+    }
+}
+
+void liberarSubLista(NodoLetra*& cabeza) {
+    while (cabeza != nullptr) {
+        NodoLetra* aux = cabeza;
+        cabeza = cabeza->siguiente;
+        delete aux;
+    }
+}
+
+void procesarPorGrupos(string nombre, int tamanoGrupo) {
+    if (tamanoGrupo <= 0) {
+        cout << "El grupo debe ser mayor a 0." << endl;
+        return;
+    }
+
+    cout << "Original: " << nombre << " \t-> Resultado: ";
+
+    const char* lector = nombre.c_str(); // Puntero al string original
+
+    // Mientras no lleguemos al final del string '\0'
+    while (*lector != '\0') {
+        
+        // 1. Crear una sub-lista para el grupo actual
+        NodoLetra* cabezaGrupo = nullptr;
+        NodoLetra* finGrupo = nullptr;
+        int contador = 0;
+
+        // Llenamos la sub-lista hasta completar el tamaño O hasta que se acabe el nombre
+        while (contador < tamanoGrupo && *lector != '\0') {
+            agregarLetra(cabezaGrupo, finGrupo, *lector);
+            lector++; // Avanzamos puntero del string original
+            contador++;
+        }
+
+        // 2. Ordenar ESTE grupo especifico
+        ordenarSubLista(cabezaGrupo);
+
+        // 3. Imprimir el grupo ya ordenado
+        NodoLetra* imprimir = cabezaGrupo;
+        while (imprimir != nullptr) {
+            cout << imprimir->letra;
+            imprimir = imprimir->siguiente;
+        }
+
+        // 4. Limpiar memoria de este grupo antes de pasar al siguiente
+        liberarSubLista(cabezaGrupo);
+    }
+    cout << endl;
+}
+
+
+
+void mostrarNombreOrdenado(string nombreOriginal) {
+    // Si el nombre está vacío, no hacemos nada
+    if (nombreOriginal.length() == 0) return;
+
+    // --- PASO 1: CONVERTIR STRING A LISTA ENLAZADA ---
+    // (Esto evita el uso de arrays y corchetes)
+    NodoLetra* cabeza = nullptr;
+    NodoLetra* fin = nullptr;
+    
+    // Usamos un puntero para leer el string original sin usar [i]
+    const char* lector = nombreOriginal.c_str();
+
+    while (*lector != '\0') {
+        NodoLetra* nuevo = new NodoLetra; // new simple (sin corchetes)
+        nuevo->letra = *lector;
+        nuevo->siguiente = nullptr;
+
+        if (cabeza == nullptr) {
+            cabeza = nuevo;
+            fin = nuevo;
+        } else {
+            fin->siguiente = nuevo;
+            fin = nuevo;
+        }
+        lector++; // Aritmética de punteros: avanza a la siguiente letra
+    }
+
+    // --- PASO 2: ORDENAMIENTO BURBUJA EN LA LISTA ---
+    if (cabeza != nullptr) {
+        bool ordenado = false;
+        while (!ordenado) {
+            ordenado = true;
+            NodoLetra* actual = cabeza;
+
+            // Recorremos mientras haya un nodo siguiente
+            while (actual->siguiente != nullptr) {
+                
+                // Convertimos a minúscula solo para la comparación (A vs a)
+                char c1 = tolower(actual->letra);
+                char c2 = tolower(actual->siguiente->letra);
+
+                if (c1 > c2) {
+                    // Intercambiamos SOLO el contenido (char), no los nodos
+                    char temp = actual->letra;
+                    actual->letra = actual->siguiente->letra;
+                    actual->siguiente->letra = temp;
+
+                    ordenado = false; // Hubo cambios, repetir ciclo
+                }
+                actual = actual->siguiente;
+            }
+        }
+    }
+
+    // --- PASO 3: IMPRIMIR ---
+    cout << "Original: " << nombreOriginal << " \t-> Transformado: ";
+    
+    NodoLetra* imprimir = cabeza;
+    while (imprimir != nullptr) {
+        cout << imprimir->letra;
+        imprimir = imprimir->siguiente;
+    }
+    cout << endl;
+    while (cabeza != nullptr) {
+        NodoLetra* aux = cabeza;
+        cabeza = cabeza->siguiente;
+        delete aux; 
+    }
+}
 void menuBoletosMain(ListaCircularDoble& miBoleteria) {
     bool menu = true;
     while (menu) {
@@ -72,11 +234,13 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
         cout << "[3] Mostrar Asientos" << endl;
         cout << "[4] Buscar Reserva" << endl;
         cout << "[5] Actualizar Reserva" << endl;
-        cout << "[6] Salir" << endl;
+        cout << "[6] Ordenar Caracteres de Nombres" << endl;
+        cout << "[7] Ordenar Nombre por Grupos" << endl;
+        cout << "[8] Salir" << endl;
 
         int opcion = _getch() - '0';
 
-        if (opcion < 1 || opcion > 6) {
+        if (opcion < 1 || opcion > 8) {
             cout << "\nOpcion no valida\n";
             Sleep(500);
             continue;
@@ -354,6 +518,73 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             }
 
             case 6: {
+                system("cls");
+                cout << "--- NOMBRES CON CARACTERES ORDENADOS ---\n\n";
+
+                if (miBoleteria.estaVacia()) {
+                    cout << "No hay reservas registradas.\n";
+                    system("pause");
+                    break;
+                }
+
+                Nodo* actual = miBoleteria.getCabeza();
+                bool hayReservas = false;
+
+                cout << "Procesando nombres de la lista en memoria...\n\n";
+
+                // Recorremos la lista circular
+                do {
+                    if (actual->dato.estaOcupado) {
+                        hayReservas = true;
+                        // Llamamos a la función que creamos arriba
+                        mostrarNombreOrdenado(actual->dato.nombreCliente);
+                    }
+                    actual = actual->siguiente;
+                } while (actual != miBoleteria.getCabeza());
+
+                if (!hayReservas) {
+                    cout << "La lista esta vacia de reservas activas.\n";
+                }
+
+                cout << "\n";
+                system("pause");
+                break;
+            }
+
+            case 7: {
+                system("cls");
+                cout << "--- ORDENAMIENTO POR GRUPOS ---\n\n";
+                
+                if (miBoleteria.estaVacia()) {
+                    cout << "No hay reservas.\n";
+                    system("pause");
+                    break;
+                }
+
+                cout << "Ingrese el tamano del grupo para agrupar las letras: ";
+                int k = ingresarEntero();
+
+                cout << "\nProcesando...\n";
+                
+                Nodo* actual = miBoleteria.getCabeza();
+                bool hayReservas = false;
+
+                do {
+                    if (actual->dato.estaOcupado) {
+                        hayReservas = true;
+                        procesarPorGrupos(actual->dato.nombreCliente, k);
+                    }
+                    actual = actual->siguiente;
+                } while (actual != miBoleteria.getCabeza());
+
+                if (!hayReservas) cout << "Todas las reservas estan vacias.\n";
+                
+                cout << "\n";
+                system("pause");
+                break;
+            }
+
+            case 8: {
                 menu = false;
                 system("cls");
                 cout << "Gracias por usar el sistema." << endl;

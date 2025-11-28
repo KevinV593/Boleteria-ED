@@ -1,8 +1,8 @@
-1;General;N/A;N/A;N/A;N/A;0
-2;General;Lauro;0601135742;12/11/2025;07:08:47;1
+1;General;Kevin;1727324814;28/11/2025;14:53:45;1
+2;General;N/A;N/A;N/A;N/A;0
 3;General;N/A;N/A;N/A;N/A;0
-4;General;alo no se see;1754144390;12/11/2025;16:55:35;1
-5;General;N/A;N/A;N/A;N/A;0
+4;General;N/A;N/A;N/A;N/A;0
+5;General;Kevin;1727324814;28/11/2025;14:54:13;1
 6;General;N/A;N/A;N/A;N/A;0
 7;General;N/A;N/A;N/A;N/A;0
 8;General;N/A;N/A;N/A;N/A;0
@@ -14,7 +14,7 @@
 14;Tribuna;N/A;N/A;N/A;N/A;0
 15;Tribuna;N/A;N/A;N/A;N/A;0
 16;Tribuna;N/A;N/A;N/A;N/A;0
-17;Palco;Ana;1803005071;12/11/2025;17:09:10;1
-18;Palco;J;1803005071;12/11/2025;17:16:08;1
+17;Palco;N/A;N/A;N/A;N/A;0
+18;Palco;N/A;N/A;N/A;N/A;0
 19;Palco;N/A;N/A;N/A;N/A;0
-20;Palco;Juan;0601135742;12/11/2025;16:56:43;1
+20;Palco;Martha;0601135742;28/11/2025;14:54:46;1
