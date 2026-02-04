@@ -9,7 +9,7 @@ using namespace std;
 
 class Persistencia {
 public:
-    static void guardarReservas(ListaCircularDoble& lista, const string& archivo = "reservas.txt") {
+    static void guardarReservas(ListaCircularDoble& lista, const string& archivo = "server/reservas.txt") {
         ofstream out(archivo);
         if (!out.is_open()) {
             cout << "Error al abrir archivo para guardar reservas." << endl;
@@ -37,7 +37,7 @@ public:
         out.close();
     }
 
-    static void cargarReservas(ListaCircularDoble& lista, const string& archivo = "reservas.txt") {
+    static void cargarReservas(ListaCircularDoble& lista, const string& archivo = "server/reservas.txt") {
         ifstream in(archivo);
         if (!in.is_open()) return;
 
