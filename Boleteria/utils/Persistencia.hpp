@@ -1,6 +1,8 @@
 #pragma once
 #include <fstream>
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include "../model/ListaCircularDoble.hpp"
 #include "../model/Boleto.hpp"
 #include "Tiempo.hpp"
