@@ -1,20 +1,20 @@
 1;General;Juanito;0601135742;04/02/2026;12:29:36;1
-2;General;N/A;N/A;N/A;N/A;0
+2;General;Kevin Vaca;1727324814;07/02/2026;16:29:54;1
 3;General;N/A;N/A;N/A;N/A;0
 4;General;N/A;N/A;N/A;N/A;0
 5;General;N/A;N/A;N/A;N/A;0
 6;General;N/A;N/A;N/A;N/A;0
-7;General;Juanito;0601135742;04/02/2026;11:45:44;1
+7;General;N/A;N/A;N/A;N/A;0
 8;General;N/A;N/A;N/A;N/A;0
 9;General;N/A;N/A;N/A;N/A;0
 10;General;N/A;N/A;N/A;N/A;0
 11;Tribuna;N/A;N/A;N/A;N/A;0
 12;Tribuna;N/A;N/A;N/A;N/A;0
-13;Tribuna;N/A;N/A;N/A;N/A;0
+13;Tribuna;Kevin Vaca;1727324814;07/02/2026;16:29:25;1
 14;Tribuna;N/A;N/A;N/A;N/A;0
 15;Tribuna;N/A;N/A;N/A;N/A;0
 16;Tribuna;N/A;N/A;N/A;N/A;0
 17;Palco;N/A;N/A;N/A;N/A;0
 18;Palco;N/A;N/A;N/A;N/A;0
-19;Palco;Juanito;0601135742;04/02/2026;12:13:09;1
+19;Palco;N/A;N/A;N/A;N/A;0
 20;Palco;Juanito;0601135742;04/02/2026;12:12:47;1

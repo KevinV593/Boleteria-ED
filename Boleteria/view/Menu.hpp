@@ -14,26 +14,34 @@
 
 using namespace std;
 
-void inicializarEvento(ListaCircularDoble& boleteria, int totalAsientos) {
+void inicializarEvento(ListaCircularDoble &boleteria, int totalAsientos)
+{
     int limiteGeneral = totalAsientos * 0.5;
     int limiteTribuna = totalAsientos * 0.8;
 
-    for (int i = 1; i <= totalAsientos; i++) {
+    for (int i = 1; i <= totalAsientos; i++)
+    {
         TipoAsiento categoria;
 
-        if (i <= limiteGeneral) categoria = GENERAL;
-        else if (i <= limiteTribuna) categoria = TRIBUNA;
-        else categoria = PALCO;
+        if (i <= limiteGeneral)
+            categoria = GENERAL;
+        else if (i <= limiteTribuna)
+            categoria = TRIBUNA;
+        else
+            categoria = PALCO;
 
         boleteria.insertarPorFinal(Boleto(i, categoria));
     }
 }
 
-string obtenerNombrePorCedula(ListaCircularDoble& lista, const string& cedula) {
-    if (lista.estaVacia()) return "";
+string obtenerNombrePorCedula(ListaCircularDoble &lista, const string &cedula)
+{
+    if (lista.estaVacia())
+        return "";
 
-    Nodo* actual = lista.getCabeza();
-    do {
+    Nodo *actual = lista.getCabeza();
+    do
+    {
         if (actual->dato.estaOcupado && actual->dato.cedulaCliente == cedula)
             return actual->dato.nombreCliente;
         actual = actual->siguiente;
@@ -42,36 +50,51 @@ string obtenerNombrePorCedula(ListaCircularDoble& lista, const string& cedula) {
     return "";
 }
 
-int pedirConfirmacion(const string& mensaje) {
+int pedirConfirmacion(const string &mensaje)
+{
     int opcion;
-    while (true) {
+    while (true)
+    {
         cout << mensaje << " (1 = Si / 0 = No): ";
         opcion = ingresarEntero();
-        if (opcion == 1 || opcion == 0) return opcion;
+        if (opcion == 1 || opcion == 0)
+            return opcion;
         cout << "Entrada invalida.\n";
     }
 }
 
 #include <cctype>
 
-struct NodoLetra {
+struct NodoLetra
+{
     char letra;
-    NodoLetra* siguiente;
+    NodoLetra *siguiente;
 };
 
-void agregarLetra(NodoLetra*& cabeza, NodoLetra*& fin, char c) {
-    NodoLetra* nuevo = new NodoLetra{ c, nullptr };
-    if (!cabeza) cabeza = fin = nuevo;
-    else { fin->siguiente = nuevo; fin = nuevo; }
+void agregarLetra(NodoLetra *&cabeza, NodoLetra *&fin, char c)
+{
+    NodoLetra *nuevo = new NodoLetra{c, nullptr};
+    if (!cabeza)
+        cabeza = fin = nuevo;
+    else
+    {
+        fin->siguiente = nuevo;
+        fin = nuevo;
+    }
 }
 
-void ordenarSubLista(NodoLetra* cabeza) {
-    if (!cabeza) return;
+void ordenarSubLista(NodoLetra *cabeza)
+{
+    if (!cabeza)
+        return;
     bool ordenado;
-    do {
+    do
+    {
         ordenado = true;
-        for (NodoLetra* a = cabeza; a->siguiente; a = a->siguiente) {
-            if (tolower(a->letra) > tolower(a->siguiente->letra)) {
+        for (NodoLetra *a = cabeza; a->siguiente; a = a->siguiente)
+        {
+            if (tolower(a->letra) > tolower(a->siguiente->letra))
+            {
                 swap(a->letra, a->siguiente->letra);
                 ordenado = false;
             }
@@ -79,30 +102,36 @@ void ordenarSubLista(NodoLetra* cabeza) {
     } while (!ordenado);
 }
 
-void liberarSubLista(NodoLetra*& cabeza) {
-    while (cabeza) {
-        NodoLetra* aux = cabeza;
+void liberarSubLista(NodoLetra *&cabeza)
+{
+    while (cabeza)
+    {
+        NodoLetra *aux = cabeza;
         cabeza = cabeza->siguiente;
         delete aux;
     }
 }
 
-void procesarPorGrupos(string nombre, int tamanoGrupo) {
-    if (tamanoGrupo <= 0) return;
+void procesarPorGrupos(string nombre, int tamanoGrupo)
+{
+    if (tamanoGrupo <= 0)
+        return;
 
-    const char* lector = nombre.c_str();
-    while (*lector) {
-        NodoLetra* cabeza = nullptr;
-        NodoLetra* fin = nullptr;
+    const char *lector = nombre.c_str();
+    while (*lector)
+    {
+        NodoLetra *cabeza = nullptr;
+        NodoLetra *fin = nullptr;
         int c = 0;
 
-        while (c < tamanoGrupo && *lector) {
+        while (c < tamanoGrupo && *lector)
+        {
             agregarLetra(cabeza, fin, *lector++);
             c++;
         }
 
         ordenarSubLista(cabeza);
-        for (NodoLetra* n = cabeza; n; n = n->siguiente)
+        for (NodoLetra *n = cabeza; n; n = n->siguiente)
             cout << n->letra;
 
         liberarSubLista(cabeza);
@@ -110,26 +139,30 @@ void procesarPorGrupos(string nombre, int tamanoGrupo) {
     cout << endl;
 }
 
-void mostrarNombreOrdenado(string nombreOriginal) {
-    if (nombreOriginal.empty()) return;
-    NodoLetra* cabeza = nullptr;
-    NodoLetra* fin = nullptr;
+void mostrarNombreOrdenado(string nombreOriginal)
+{
+    if (nombreOriginal.empty())
+        return;
+    NodoLetra *cabeza = nullptr;
+    NodoLetra *fin = nullptr;
 
-    for (const char* p = nombreOriginal.c_str(); *p; p++)
+    for (const char *p = nombreOriginal.c_str(); *p; p++)
         agregarLetra(cabeza, fin, *p);
 
     ordenarSubLista(cabeza);
 
-    for (NodoLetra* n = cabeza; n; n = n->siguiente)
+    for (NodoLetra *n = cabeza; n; n = n->siguiente)
         cout << n->letra;
     cout << endl;
 
     liberarSubLista(cabeza);
 }
 
-void menuBoletosMain(ListaCircularDoble& miBoleteria) {
+void menuBoletosMain(ListaCircularDoble &miBoleteria)
+{
     bool menu = true;
-    while (menu) {
+    while (menu)
+    {
         system("cls");
         cout << "****************************" << endl;
         cout << "*    RESERVA DE BOLETOS    *" << endl;
@@ -144,14 +177,17 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
         cout << "[8] Salir" << endl;
 
         int opcion = _getch() - '0';
-        if (opcion < 1 || opcion > 8) {
+        if (opcion < 1 || opcion > 8)
+        {
             cout << "\nOpcion no valida\n";
             Sleep(500);
             continue;
         }
-        switch (opcion) {
+        switch (opcion)
+        {
 
-        case 1: {
+        case 1:
+        {
             system("cls");
             cout << "--- RESERVAR ASIENTO ---\n\n";
             Persistencia::cargarReservas(miBoleteria);
@@ -159,15 +195,17 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             cout << "Ingrese el numero de asiento: ";
             int num = ingresarEntero();
 
-            Nodo* n = miBoleteria.buscar(num);
+            Nodo *n = miBoleteria.buscar(num);
 
-            if (!n) {
+            if (!n)
+            {
                 cout << "Error: Asiento inexistente.\n";
                 system("pause");
                 break;
             }
 
-            if (n->dato.estaOcupado) {
+            if (n->dato.estaOcupado)
+            {
                 cout << "Error: Asiento ya reservado.\n";
                 system("pause");
                 break;
@@ -180,29 +218,34 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
 
             string nombre = obtenerNombrePorCedula(miBoleteria, cedula);
 
-            if (!nombre.empty()) {
+            if (!nombre.empty())
+            {
                 cout << "Cedula ya registrada como: " << nombre << endl;
-            } else {
+            }
+            else
+            {
                 cout << "Ingrese el nombre del cliente: ";
                 nombre = ingresarNombre();
             }
 
             cout << "\n Procesando reserva con verificacion de concurrencia...\n";
-            
-            bool exito = ConcurrenciaOCC::actualizarAsiento(
-                num,                          
-                "OCUPADO",              
-                nombre,                      
-                cedula,                        
-                n->dato.getCategoria(),        
-                Tiempo::obtenerFecha(),        
-                Tiempo::obtenerHora()          
-            );
 
-            if (exito) {
- 
+            bool exito = ConcurrenciaOCC::actualizarAsiento(
+                num,
+                "OCUPADO",
+                nombre,
+                cedula,
+                n->dato.getCategoria(),
+                Tiempo::obtenerFecha(),
+                Tiempo::obtenerHora());
+
+            if (exito)
+            {
+
                 Persistencia::cargarReservas(miBoleteria);
-            } else {
+            }
+            else
+            {
                 cout << "\n Refrescando disponibilidad de asientos...\n";
                 Persistencia::cargarReservas(miBoleteria);
                 cout << "    Por favor, elige otro asiento.\n";
@@ -212,139 +255,163 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             break;
         }
 
+        case 2:
+        {
+            system("cls");
+            cout << "--- CANCELAR RESERVA ---\n\n";
 
-        case 2: {
-                system("cls");
-                cout << "--- CANCELAR RESERVA ---\n\n";
+            Persistencia::cargarReservas(miBoleteria);
 
-                Persistencia::cargarReservas(miBoleteria);
+            if (miBoleteria.estaVacia())
+            {
+                cout << "No hay reservas registradas.\n";
+                system("pause");
+                break;
+            }
 
-                if (miBoleteria.estaVacia()) {
-                    cout << "No hay reservas registradas.\n";
-                    system("pause");
-                    break;
+            cout << "Ingrese la cedula: ";
+            string cedula = ingresarCedula();
+
+            Nodo *cabeza = miBoleteria.getCabeza();
+            Nodo *actual = cabeza;
+
+            vector<Nodo *> encontrados;
+
+            do
+            {
+                if (actual->dato.estaOcupado &&
+                    actual->dato.cedulaCliente == cedula)
+                {
+                    encontrados.push_back(actual);
                 }
+                actual = actual->siguiente;
+            } while (actual != cabeza);
 
-                cout << "Ingrese la cedula: ";
-                string cedula = ingresarCedula();
+            if (encontrados.empty())
+            {
+                cout << "Error: No se encontro reserva para esa cedula.\n";
+                system("pause");
+                break;
+            }
 
-                Nodo* cabeza = miBoleteria.getCabeza();
-                Nodo* actual = cabeza;
+            if (encontrados.size() == 1)
+            {
+                int numAsiento = encontrados[0]->dato.numeroAsiento;
 
-                vector<Nodo*> encontrados;
+                cout << "Cancelando asiento " << numAsiento << "...\n";
+                bool exito = ConcurrenciaOCC::cancelarAsientoOCC(numAsiento);
 
-                do {
-                    if (actual->dato.estaOcupado &&
-                        actual->dato.cedulaCliente == cedula) {
-                        encontrados.push_back(actual);
-                    }
-                    actual = actual->siguiente;
-                } while (actual != cabeza);
-
-                if (encontrados.empty()) {
-                    cout << "Error: No se encontro reserva para esa cedula.\n";
-                    system("pause");
-                    break;
+                if (exito)
+                {
+                    cout << "Reserva cancelada exitosamente.\n";
+                    Persistencia::cargarReservas(miBoleteria);
                 }
-
-                if (encontrados.size() == 1) {
-                    int numAsiento = encontrados[0]->dato.numeroAsiento;
-
-                    cout << "Cancelando asiento " << numAsiento << "...\n";
-                    bool exito = ConcurrenciaOCC::cancelarAsientoOCC(numAsiento);
-
-                    if (exito) {
-                        cout << "Reserva cancelada exitosamente.\n";
-                        Persistencia::cargarReservas(miBoleteria);
-                    } else {
-                        cout << "Error al cancelar la reserva.\n";
-                    }
-
-                    system("pause");
-                    break;
-                }
-
-                cout << "\nLa cedula tiene " << encontrados.size() << " reservas.\n";
-                int cancelarTodo = pedirConfirmacion("Cancelar todas?");
-
-                if (cancelarTodo == 1) {
-
-                    bool error = false;
-
-                    for (Nodo* nodo : encontrados) {
-                        int numAsiento = nodo->dato.numeroAsiento;
-                        if (!ConcurrenciaOCC::cancelarAsientoOCC(numAsiento)) {
-                            cout << "Error al cancelar el asiento " << numAsiento << ".\n";
-                            error = true;
-                        }
-                    }
-
-                    if (!error) {
-                        cout << "Reservas canceladas exitosamente.\n";
-                        Persistencia::cargarReservas(miBoleteria);
-                    }
-
-                    system("pause");
-                    break;
-                }
-                bool seguir = true;
-
-                while (seguir && !encontrados.empty()) {
-
-                    cout << "\nReservas encontradas:\n";
-                    for (size_t i = 0; i < encontrados.size(); i++) {
-                        cout << "[" << i + 1 << "] Asiento "
-                            << encontrados[i]->dato.numeroAsiento
-                            << " (" << encontrados[i]->dato.getCategoria() << ")\n";
-                    }
-
-                    cout << "Seleccione reserva a cancelar: ";
-                    int idx = ingresarEntero() - 1;
-
-                    if (idx < 0 || idx >= (int)encontrados.size()) {
-                        cout << "Opcion invalida.\n";
-                    } else {
-                        int numAsiento = encontrados[idx]->dato.numeroAsiento;
-
-                        cout << "Cancelando asiento " << numAsiento << "...\n";
-                        bool exito = ConcurrenciaOCC::cancelarAsientoOCC(numAsiento);
-
-                        if (exito) {
-                            cout << "Reserva cancelada.\n";
-                            encontrados.erase(encontrados.begin() + idx);
-                            Persistencia::cargarReservas(miBoleteria);
-                        } else {
-                            cout << "Error al cancelar la reserva.\n";
-                        }
-                    }
-
-                    if (encontrados.empty()) {
-                        cout << "No quedan reservas para esta cedula.\n";
-                        break;
-                    }
-
-                    seguir = pedirConfirmacion("Cancelar otro?");
+                else
+                {
+                    cout << "Error al cancelar la reserva.\n";
                 }
 
                 system("pause");
                 break;
             }
 
-        case 3: {
+            cout << "\nLa cedula tiene " << encontrados.size() << " reservas.\n";
+            int cancelarTodo = pedirConfirmacion("Cancelar todas?");
+
+            if (cancelarTodo == 1)
+            {
+
+                bool error = false;
+
+                for (Nodo *nodo : encontrados)
+                {
+                    int numAsiento = nodo->dato.numeroAsiento;
+                    if (!ConcurrenciaOCC::cancelarAsientoOCC(numAsiento))
+                    {
+                        cout << "Error al cancelar el asiento " << numAsiento << ".\n";
+                        error = true;
+                    }
+                }
+
+                if (!error)
+                {
+                    cout << "Reservas canceladas exitosamente.\n";
+                    Persistencia::cargarReservas(miBoleteria);
+                }
+
+                system("pause");
+                break;
+            }
+            bool seguir = true;
+
+            while (seguir && !encontrados.empty())
+            {
+
+                cout << "\nReservas encontradas:\n";
+                for (size_t i = 0; i < encontrados.size(); i++)
+                {
+                    cout << "[" << i + 1 << "] Asiento "
+                         << encontrados[i]->dato.numeroAsiento
+                         << " (" << encontrados[i]->dato.getCategoria() << ")\n";
+                }
+
+                cout << "Seleccione reserva a cancelar: ";
+                int idx = ingresarEntero() - 1;
+
+                if (idx < 0 || idx >= (int)encontrados.size())
+                {
+                    cout << "Opcion invalida.\n";
+                }
+                else
+                {
+                    int numAsiento = encontrados[idx]->dato.numeroAsiento;
+
+                    cout << "Cancelando asiento " << numAsiento << "...\n";
+                    bool exito = ConcurrenciaOCC::cancelarAsientoOCC(numAsiento);
+
+                    if (exito)
+                    {
+                        cout << "Reserva cancelada.\n";
+                        encontrados.erase(encontrados.begin() + idx);
+                        Persistencia::cargarReservas(miBoleteria);
+                    }
+                    else
+                    {
+                        cout << "Error al cancelar la reserva.\n";
+                    }
+                }
+
+                if (encontrados.empty())
+                {
+                    cout << "No quedan reservas para esta cedula.\n";
+                    break;
+                }
+
+                seguir = pedirConfirmacion("Cancelar otro?");
+            }
+
+            system("pause");
+            break;
+        }
+
+        case 3:
+        {
             system("cls");
-            Persistencia::cargarReservas(miBoleteria); 
+            Persistencia::cargarReservas(miBoleteria);
             miBoleteria.mostrarDesdeInicio();
             system("pause");
             break;
         }
 
-        case 4: {
+        case 4:
+        {
             system("cls");
-            Persistencia::cargarReservas(miBoleteria); 
+            Persistencia::cargarReservas(miBoleteria);
             string cedula = ingresarCedula();
 
-            Nodo* a = miBoleteria.getCabeza();
-            do {
+            Nodo *a = miBoleteria.getCabeza();
+            do
+            {
                 if (a->dato.estaOcupado && a->dato.cedulaCliente == cedula)
                     a->dato.mostrarDatos();
                 a = a->siguiente;
@@ -354,7 +421,8 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             break;
         }
 
-        case 5: {
+        case 5:
+        {
             system("cls");
             Persistencia::cargarReservas(miBoleteria);
 
@@ -363,25 +431,29 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             cout << "Ingrese la cedula del cliente: ";
             string cedula = ingresarCedula();
 
-            if (miBoleteria.estaVacia()) {
+            if (miBoleteria.estaVacia())
+            {
                 cout << "No hay asientos.\n";
                 system("pause");
                 break;
             }
 
-            Nodo* actual = miBoleteria.getCabeza();
-            Nodo* nodoEncontrado = nullptr;
+            Nodo *actual = miBoleteria.getCabeza();
+            Nodo *nodoEncontrado = nullptr;
 
-            do {
+            do
+            {
                 if (actual->dato.estaOcupado &&
-                    actual->dato.cedulaCliente == cedula) {
+                    actual->dato.cedulaCliente == cedula)
+                {
                     nodoEncontrado = actual;
                     break;
                 }
                 actual = actual->siguiente;
             } while (actual != miBoleteria.getCabeza());
 
-            if (!nodoEncontrado) {
+            if (!nodoEncontrado)
+            {
                 cout << "No se encontro reserva.\n";
                 system("pause");
                 break;
@@ -394,32 +466,38 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             string nombreTemp = nodoEncontrado->dato.nombreCliente;
             string cedulaTemp = nodoEncontrado->dato.cedulaCliente;
 
-            if (pedirConfirmacion("Cambiar nombre?") == 1) {
+            if (pedirConfirmacion("Cambiar nombre?") == 1)
+            {
                 cout << "Ingrese el nuevo nombre: ";
                 nombreTemp = ingresarNombre();
             }
 
-            if (pedirConfirmacion("Cambiar cedula?") == 1) {
+            if (pedirConfirmacion("Cambiar cedula?") == 1)
+            {
                 cout << "Ingrese la nueva cedula: ";
                 cedulaTemp = ingresarCedula();
             }
 
-            if (pedirConfirmacion("Cambiar asiento?") == 1) {
+            if (pedirConfirmacion("Cambiar asiento?") == 1)
+            {
                 cout << "Ingrese el nuevo numero de asiento: ";
                 int nuevoAsiento = ingresarEntero();
 
-                Nodo* nuevoNodo = miBoleteria.buscar(nuevoAsiento);
+                Nodo *nuevoNodo = miBoleteria.buscar(nuevoAsiento);
 
-                if (!nuevoNodo) {
+                if (!nuevoNodo)
+                {
                     cout << "Ese asiento no existe.\n";
                 }
-                else if (nuevoNodo->dato.estaOcupado) {
+                else if (nuevoNodo->dato.estaOcupado)
+                {
                     cout << "Ese asiento ya esta ocupado.\n";
                 }
-                else {
-    
+                else
+                {
+
                     ConcurrenciaOCC::cancelarAsientoOCC(nodoEncontrado->dato.numeroAsiento);
-                    
+
                     bool exito = ConcurrenciaOCC::actualizarAsiento(
                         nuevoAsiento,
                         "OCUPADO",
@@ -427,18 +505,20 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
                         cedulaTemp,
                         nuevoNodo->dato.getCategoria(),
                         Tiempo::obtenerFecha(),
-                        Tiempo::obtenerHora()
-                    );
+                        Tiempo::obtenerHora());
 
-                    if (exito) {
+                    if (exito)
+                    {
                         Persistencia::cargarReservas(miBoleteria);
                         cout << "\nAsiento cambiado correctamente.\n";
-                    } else {
+                    }
+                    else
+                    {
                         cout << "\nError: El asiento acaba de ser ocupado por otro usuario.\n";
                         cout << "    Refrescando disponibilidad...\n";
                         Persistencia::cargarReservas(miBoleteria);
                     }
-                    
+
                     system("pause");
                     break;
                 }
@@ -454,33 +534,37 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             break;
         }
 
-
-        case 6: {
+        case 6:
+        {
             system("cls");
-            Persistencia::cargarReservas(miBoleteria); 
+            Persistencia::cargarReservas(miBoleteria);
 
             cout << "--- NOMBRES CON CARACTERES ORDENADOS ---\n\n";
 
-            if (miBoleteria.estaVacia()) {
+            if (miBoleteria.estaVacia())
+            {
                 cout << "No hay reservas registradas.\n";
                 system("pause");
                 break;
             }
 
-            Nodo* actual = miBoleteria.getCabeza();
+            Nodo *actual = miBoleteria.getCabeza();
             bool hayReservas = false;
 
             cout << "Procesando nombres de la lista en memoria...\n\n";
 
-            do {
-                if (actual->dato.estaOcupado) {
+            do
+            {
+                if (actual->dato.estaOcupado)
+                {
                     hayReservas = true;
                     mostrarNombreOrdenado(actual->dato.nombreCliente);
                 }
                 actual = actual->siguiente;
             } while (actual != miBoleteria.getCabeza());
 
-            if (!hayReservas) {
+            if (!hayReservas)
+            {
                 cout << "La lista esta vacia de reservas activas.\n";
             }
 
@@ -488,17 +572,48 @@ void menuBoletosMain(ListaCircularDoble& miBoleteria) {
             break;
         }
 
-        case 7: {
+        case 7:
+        {
             system("cls");
-            Persistencia::cargarReservas(miBoleteria);
+            cout << "--- ORDENAMIENTO POR GRUPOS ---\n\n";
+
+            if (miBoleteria.estaVacia())
+            {
+                cout << "No hay reservas.\n";
+                system("pause");
+                break;
+            }
+
+            cout << "Ingrese el tamano del grupo para agrupar las letras: ";
+            int k = ingresarEntero();
+
+            cout << "\nProcesando...\n";
+
+            Nodo *actual = miBoleteria.getCabeza();
+            bool hayReservas = false;
+
+            do
+            {
+                if (actual->dato.estaOcupado)
+                {
+                    hayReservas = true;
+                    procesarPorGrupos(actual->dato.nombreCliente, k);
+                }
+                actual = actual->siguiente;
+            } while (actual != miBoleteria.getCabeza());
+
+            if (!hayReservas)
+                cout << "Todas las reservas estan vacias.\n";
+
+            cout << "\n";
             system("pause");
             break;
         }
 
         case 8:
             menu = false;
-                system("cls");
-                cout << "Gracias por usar el sistema." << endl;
+            system("cls");
+            cout << "Gracias por usar el sistema." << endl;
             break;
         }
     }
