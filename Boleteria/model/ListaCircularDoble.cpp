@@ -15,21 +15,22 @@ ListaCircularDoble::~ListaCircularDoble() {
     Nodo* actual = cabeza;
     Nodo* siguiente = nullptr;
 
-    cout << "\nLimpiando memoria (ejecutando destructor)..." << endl;
+
     
     Nodo* ultimo = cabeza->anterior;
 
+    
     while (actual != ultimo) {
         siguiente = actual->siguiente; 
-        cout << "Borrando Asiento " << actual->dato.numeroAsiento << endl;
+        //cout << "Borrando Asiento " << actual->dato.numeroAsiento << endl;
         delete actual; // Borramos el actual
         actual = siguiente; // Avanzamos al siguiente
     }
 
-    cout << "Borrando Asiento " << ultimo->dato.numeroAsiento << endl;
+    //cout << "Borrando Asiento " << ultimo->dato.numeroAsiento << endl;
     delete ultimo;
 
-    cabeza = nullptr; // Marcamos la lista como vacía
+    cabeza = nullptr;
 }
 
 bool ListaCircularDoble::estaVacia() {
