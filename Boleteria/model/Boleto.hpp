@@ -51,27 +51,23 @@ public:
     }
 
     void mostrarAsiento() {
-        cout << "[" << id << "]";
-        cout << "\t- Asiento: " << numeroAsiento;
-        cout << "\t- Categoria: " << getCategoria();
+        cout << "\t [" << id << "]";
+        cout << "\t | Estado: ";
         if (estaOcupado) {
-            cout << "\t - RESERVADO ";
+            cout << "RESERVADO ";
         } else {
-            cout << "\t - DISPONIBLE";
+            cout << "DISPONIBLE";
         }
     }
 
     void mostrarDatos() {
     cout << "[" << id << "]"; 
-        cout << " | Cat: " << getCategoria();
-
         if (estaOcupado) {
-            // Mostramos la información completa
             cout << " | RESERVADO por: " << nombreCliente;
             cout << " (CI: " << cedulaCliente << ")";
-            cout << " | Fecha: " << fechaReserva << " " << horaReserva;
+            cout << " | Fecha: " << fechaReserva << " " << horaReserva << "\n";
         } else {
-            cout << " | DISPONIBLE";
+            cout << " | DISPONIBLE \n";
         }
     }
 };

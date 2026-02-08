@@ -136,7 +136,7 @@ Nodo* ListaCircularDoble::buscar(int numeroAsiento) {
 
 void ListaCircularDoble::mostrarDesdeInicio() {
 if (estaVacia()) {
-        cout << "Lista (->): [ Vacía ]" << endl;
+        cout << "La Lista esta Vacía!" << endl;
         return;
     }
 

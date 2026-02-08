@@ -9,11 +9,6 @@
 
 using namespace std;
 
-/**
- * @class ConcurrenciaOCC
- * @brief Implementa Optimistic Concurrency Control (OCC) para operaciones de lectura-comparación-escritura
- *        sobre el archivo compartido reservas.txt sin usar locks del SO
- */
 class ConcurrenciaOCC {
 private:
     /**
