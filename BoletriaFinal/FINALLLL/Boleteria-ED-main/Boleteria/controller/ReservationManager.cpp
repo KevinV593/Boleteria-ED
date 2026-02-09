@@ -29,17 +29,60 @@ void ReservationManager::buscarReservasPorCedula(ListaCircularDoble &boleteria)
     system("cls");
     Persistencia::cargarReservas(boleteria);
 
-    cout << "Ingrese la cedula: ";
-    string cedula = ingresarCedula();
+    cout << "--- BUSQUEDA DE RESERVAS POR CEDULA ---\n";
 
-    Nodo *a = boleteria.getCabeza();
+    if (boleteria.estaVacia())
+    {
+        cout << "[!] El sistema no tiene reservas registradas aun.\n\n";
+        system("pause");
+        return;
+    }
+
+    cout << "Ingrese la cedula a consultar: ";
+    string cedula = ingresarCedula(); 
+    cout << "\nBuscando registros...\n";
+    Sleep(500); 
+
+    Nodo *actual = boleteria.getCabeza();
+    bool encontrado = false;
+    int cantidadBoletos = 0;
+
     do
     {
-        if (a->dato.estaOcupado && a->dato.cedulaCliente == cedula)
-            a->dato.mostrarDatos();
-        a = a->siguiente;
-    } while (a != boleteria.getCabeza());
+        if (actual->dato.estaOcupado && actual->dato.cedulaCliente == cedula)
+        {
+            if (!encontrado) 
+            {
+                cout << "\n----------------------------------------\n";
+                cout << " CLIENTE: " << actual->dato.nombreCliente << "\n";
+                cout << " CEDULA:  " << actual->dato.cedulaCliente << "\n";
+                cout << "----------------------------------------\n";
+                cout << " Boletos Reservados:\n";
+                encontrado = true;
+            }
 
+            cout << "   [X] Asiento " << actual->dato.numeroAsiento 
+                 << " (" << actual->dato.getCategoria() << ")"
+                 << " - Fecha: " << actual->dato.fechaReserva << "\n";
+            
+            cantidadBoletos++;
+        }
+        actual = actual->siguiente;
+
+    } while (actual != boleteria.getCabeza());
+
+    cout << "----------------------------------------\n";
+
+    if (encontrado)
+    {
+        cout << "\n[RESULTADO] Se encontraron " << cantidadBoletos << " reserva(s) exitosamente.\n";
+    }
+    else
+    {
+        cout << "\n[RESULTADO] No se encontraron reservas asociadas al numero de cedula " << cedula << ".\n";
+    }
+
+    cout << "\n";
     system("pause");
 }
 

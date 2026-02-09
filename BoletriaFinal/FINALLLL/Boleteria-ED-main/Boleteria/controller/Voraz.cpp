@@ -30,97 +30,133 @@ void Voraz::cambioDeMoneda() {
                 delete[] monedas;
             }
         }
-
+        
 void Voraz::asignacionRapida(ListaCircularDoble &boleteria) {
-        system("cls");
-        cout << "--- RESERVA VORAZ (PRIMER DISPONIBLE) ---\n\n";
+    system("cls");
+    cout << "--- RESERVA VORAZ (PRIMER DISPONIBLE) ---\n\n";
 
-        Persistencia::cargarReservas(boleteria);
+    // 1. Cargamos datos frescos
+    Persistencia::cargarReservas(boleteria);
 
-        if (boleteria.estaVacia()) {
-            cout << "Error: La boleteria no ha sido inicializada.\n";
-            system("pause");
-            return;
-        }
-
-        cout << "Ingrese cantidad de asientos a reservar (sea prudente): ";
-        int cantidad = ingresarEntero(); 
-
-        if (cantidad <= 0) {
-            cout << "Cantidad invalida.\n";
-            system("pause");
-            return;
-        }
-
-        cout << "Ingrese la cedula del cliente: ";
-        string cedula = ingresarCedula();
-
-        string nombre = ReservationManager::obtenerNombrePorCedula(boleteria, cedula);
-
-        if (!nombre.empty()) {
-            cout << "Cliente identificado: " << nombre << endl;
-        } else {
-            cout << "Ingrese el nombre del cliente: ";
-            nombre = ingresarNombre(); 
-        }
-
-        string fechaHoy = Tiempo::obtenerFecha();
-        string horaActual = Tiempo::obtenerHora();
-
-        int asignados = 0;
-        Nodo* actual = boleteria.getCabeza();
-        int vueltas = 0; 
-
-        cout << "\nProcesando asignacion automatica (Voraz)...\n";
-
-        do {
-            if (!actual->dato.estaOcupado) {
-                
-                bool exitoOCC = ConcurrenciaOCC::actualizarAsiento(
-                    actual->dato.numeroAsiento,
-                    "OCUPADO",
-                    nombre,
-                    cedula,
-                    actual->dato.getCategoria(),
-                    fechaHoy,
-                    horaActual
-                );
-
-                if (exitoOCC) {
-
-                    actual->dato.reservar(nombre, cedula);
-                    
-                    cout << " [EXITO] Asiento " << actual->dato.numeroAsiento 
-                         << " (" << actual->dato.getCategoria() << ") asignado.\n";
-                    
-                    asignados++;
-                } else {
-                    cout << " [BLOQUEADO] El asiento " << actual->dato.numeroAsiento 
-                         << " fue ocupado por otro proceso.\n";
-                }
-            }
-            
-            actual = actual->siguiente;
-
-            if (actual == boleteria.getCabeza()) {
-                vueltas++;
-                if (vueltas == 1) Persistencia::cargarReservas(boleteria);
-                if (vueltas >= 2) break; 
-            }
-
-        } while (asignados < cantidad);
-
-        cout << "\n--------------------------------------------------\n";
-        if (asignados == 0) {
-            cout << "ERROR: No se pudo reservar ningun asiento (Evento lleno o alta concurrencia).\n";
-        } else if (asignados < cantidad) {
-            cout << "PARCIAL: Solo se reservaron " << asignados 
-                 << " de " << cantidad << " solicitados.\n";
-        } else {
-            cout << "EXITO: Se han reservado " << cantidad << " asientos correctamente.\n";
-        }
-
-        Persistencia::cargarReservas(boleteria); 
-
+    if (boleteria.estaVacia()) {
+        cout << "Error: La boleteria no ha sido inicializada.\n";
         system("pause");
+        return;
     }
+
+    // ==========================================================
+    // NUEVO: CONTAR ASIENTOS DISPONIBLES REALES
+    // ==========================================================
+    int asientosDisponibles = 0;
+    Nodo* aux = boleteria.getCabeza();
+    
+    // Recorremos la lista para contar los 'false'
+    do {
+        if (!aux->dato.estaOcupado) {
+            asientosDisponibles++;
+        }
+        aux = aux->siguiente;
+    } while (aux != boleteria.getCabeza());
+
+    // Caso: Evento lleno
+    if (asientosDisponibles == 0) {
+        cout << "LO SENTIMOS: El evento esta completamente LLENO (Sold Out).\n";
+        system("pause");
+        return;
+    }
+
+    // Informamos al usuario el límite
+    cout << "INFO: Hay " << asientosDisponibles << " asientos libres en este momento.\n\n";
+
+    // ==========================================================
+
+    cout << "Ingrese cantidad de asientos a reservar (Max: " << asientosDisponibles << "): ";
+    int cantidad = ingresarEntero(); 
+
+    // Validación básica
+    if (cantidad <= 0) {
+        cout << "Cantidad invalida.\n";
+        system("pause");
+        return;
+    }
+
+    // NUEVO: Validación del límite superior
+    if (cantidad > asientosDisponibles) {
+        cout << "\nERROR: No puede reservar " << cantidad 
+             << " asientos porque solo quedan " << asientosDisponibles << " disponibles.\n";
+        system("pause");
+        return;
+    }
+
+    // --- EL RESTO DEL CÓDIGO SIGUE IGUAL ---
+
+    cout << "Ingrese la cedula del cliente: ";
+    string cedula = ingresarCedula();
+
+    string nombre = ReservationManager::obtenerNombrePorCedula(boleteria, cedula);
+
+    if (!nombre.empty()) {
+        cout << "Cliente identificado: " << nombre << endl;
+    } else {
+        nombre = ingresarNombre(); 
+    }
+
+    string fechaHoy = Tiempo::obtenerFecha();
+    string horaActual = Tiempo::obtenerHora();
+
+    int asignados = 0;
+    Nodo* actual = boleteria.getCabeza();
+    int vueltas = 0; 
+
+    cout << "\nProcesando asignacion automatica (Voraz)...\n";
+
+    do {
+        if (!actual->dato.estaOcupado) {
+            
+            bool exitoOCC = ConcurrenciaOCC::actualizarAsiento(
+                actual->dato.numeroAsiento,
+                "OCUPADO",
+                nombre,
+                cedula,
+                actual->dato.getCategoria(),
+                fechaHoy,
+                horaActual
+            );
+
+            if (exitoOCC) {
+                actual->dato.reservar(nombre, cedula);
+                
+                cout << " [EXITO] Asiento " << actual->dato.numeroAsiento 
+                     << " (" << actual->dato.getCategoria() << ") asignado.\n";
+                
+                asignados++;
+            } else {
+                cout << " [BLOQUEADO] El asiento " << actual->dato.numeroAsiento 
+                     << " fue ocupado por otro proceso.\n";
+            }
+        }
+        
+        actual = actual->siguiente;
+
+        if (actual == boleteria.getCabeza()) {
+            vueltas++;
+            if (vueltas == 1) Persistencia::cargarReservas(boleteria);
+            if (vueltas >= 2) break; 
+        }
+
+    } while (asignados < cantidad);
+
+    cout << "\n--------------------------------------------------\n";
+    if (asignados == 0) {
+        cout << "ERROR: No se pudo reservar ningun asiento (Evento lleno o alta concurrencia).\n";
+    } else if (asignados < cantidad) {
+        cout << "PARCIAL: Solo se reservaron " << asignados 
+             << " de " << cantidad << " solicitados.\n";
+    } else {
+        cout << "EXITO: Se han reservado " << cantidad << " asientos correctamente.\n";
+    }
+
+    Persistencia::cargarReservas(boleteria); 
+
+    system("pause");
+}
