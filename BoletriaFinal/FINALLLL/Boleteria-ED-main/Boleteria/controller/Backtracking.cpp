@@ -19,29 +19,72 @@ void Backtracking::combinacionesAsientos(ListaCircularDoble &boleteria) {
     delete[] data;
     delete[] ocupados;
 }
-
 void Backtracking::permutacionesNombres(ListaCircularDoble &boleteria) {
-    int count = contarClientesOcupados(boleteria);
-    if (count == 0) { cout << "No hay clientes ocupados.\n"; return; }
-
-    // Contar posibles permutaciones
-    long long total = 1;
-    for (int i = 2; i <= count; i++) total *= i;
-
-    cout << "Se van a generar " << total << " permutaciones.\n";
-    if (total > 30) { // límite práctico para no congelar
-        char confirm;
-        cout << "Esto puede tardar mucho. Desea continuar? (s/n): ";
-        cin >> confirm;
-        if (confirm != 's' && confirm != 'S') return;
+    int totalOcupados = 0;
+    if (!boleteria.estaVacia()) {
+        Nodo* aux = boleteria.getCabeza();
+        do {
+            if (aux->dato.estaOcupado) totalOcupados++;
+            aux = aux->siguiente;
+        } while (aux != boleteria.getCabeza());
     }
 
-    string** nombres = new string*[count];
-    llenarNombresOcupados(boleteria, nombres);
+    if (totalOcupados == 0) { 
+        cout << "No hay clientes ocupados para permutar.\n"; 
+        return; 
+    }
 
-    permutaciones(nombres, count, 0);
+    string** nombresUnicos = new string*[totalOcupados];
+    int contadorUnicos = 0;
 
-    delete[] nombres;
+    Nodo* actual = boleteria.getCabeza();
+    do {
+        if (actual->dato.estaOcupado) {
+            string nombreActual = actual->dato.nombreCliente;
+            bool existe = false;
+
+            for (int i = 0; i < contadorUnicos; i++) {
+                if (*(nombresUnicos[i]) == nombreActual) {
+                    existe = true;
+                    break;
+                }
+            }
+
+            if (!existe) {
+                nombresUnicos[contadorUnicos] = new string(nombreActual);
+                contadorUnicos++;
+            }
+        }
+        actual = actual->siguiente;
+    } while (actual != boleteria.getCabeza());
+
+    long long total = 1;
+    for (int i = 2; i <= contadorUnicos; i++) total *= i;
+
+    cout << "Se encontraron " << contadorUnicos << " nombres unicos.\n";
+    cout << "Se van a generar " << total << " permutaciones posibles.\n";
+
+    if (total > 40000) { // Límite de seguridad
+        cout << "ADVERTENCIA: Son demasiadas combinaciones. Desea continuar? (s/n): ";
+        char confirm;
+        cin >> confirm;
+        if (confirm != 's' && confirm != 'S') {
+            // Limpieza antes de salir
+            for (int i = 0; i < contadorUnicos; i++) delete nombresUnicos[i];
+            delete[] nombresUnicos;
+            return;
+        }
+    }
+
+    cout << "\n--- GENERANDO PERMUTACIONES ---\n";
+    
+    permutaciones(nombresUnicos, contadorUnicos, 0);
+
+    for (int i = 0; i < contadorUnicos; i++) {
+        delete nombresUnicos[i]; // Borrar cada string creado
+    }
+    delete[] nombresUnicos; // Borrar el arreglo de punteros
+
 }
 
 int Backtracking::contarAsientosOcupados(ListaCircularDoble &boleteria) {

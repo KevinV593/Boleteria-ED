@@ -6,6 +6,7 @@
 #include <vector>
 #include "../model/Boleto.hpp"
 #include "../model/ListaCircularDoble.hpp"
+#include "../utils/hash.hpp" 
 
 using namespace std;
 
@@ -103,6 +104,10 @@ private:
         }
 
         out.close();
+
+        string archivoHash = archivo.substr(0, archivo.find_last_of('.')) + ".hash";
+        guardarHash(archivo, archivoHash);
+        
         return true;
     }
 

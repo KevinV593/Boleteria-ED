@@ -11,24 +11,53 @@
 #include "../utils/Validaciones.hpp"
 #include <iostream>
 #include <windows.h>
+#include "../utils/hash.hpp" 
+
 
 using namespace std;
 
+const string ARCHIVO_DATOS = "server/reservas.txt";
+const string ARCHIVO_HASH = "server/reservas.hash";
+
 void MenuController::ejecutar(ListaCircularDoble &boleteria)
 {
+
+    cout << "Verificando integridad de los datos...\n";
+
+    if (!verificarIntegridad(ARCHIVO_DATOS, ARCHIVO_HASH)) {
+
+        system("color 4F"); 
+        
+        cout << "\n[PELIGRO] ALERTA DE SEGURIDAD\n";
+        cout << "El archivo de reservas ha sido modificado externamente.\n";
+        cout << "El hash de seguridad no coincide.\n\n";
+        cout << "El sistema se cerrara por precaucion.\n";
+        system("pause");
+        exit(1); 
+    } else {
+        // CASO DE ÉXITO (TODO ESTÁ BIEN)
+        system("color 07"); // <--- AGREGA ESTO: Fondo NEGRO, letras Blancas (Normal)
+        
+        cout << "[OK] Integridad verificada correctamente.\n";
+        Sleep(1000); 
+        system("cls");
+    }
+
+    // ... resto del código ...
+
     bool menu = true;
     while (menu)
     {
         int opcion = MenuUI::mostrarMenuPrincipal();
 
-        if (opcion < 1 || opcion > 18)
+        if (opcion < 1 || opcion > 13)
         {
             cout << "\nOpcion no valida\n";
             Sleep(500);
             continue;
         }
 
-        if (opcion == 18 )
+        if (opcion == 13 )
         {
             menu = false;
             system("cls");
@@ -146,17 +175,18 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
         Exhaustiva::ingresosTotales(boleteria);
         break; 
     }
-
+    /*
     case 9:
     {
         Exhaustiva::busquedaPorPatron(boleteria);
         break;
     }
+    */
 
-    case 10: 
+    case 9: 
     {
     system("cls");
-    cout << "--- ORDENAMIENTO DE ASIENTOS OCUPADOS (MERGE SORT) ---\n";
+    cout << "--- ASIENTOS OCUPADOS ---\n";
     
     if (boleteria.estaVacia()) {
         cout << "No hay asientos para ordenar.\n";
@@ -204,11 +234,11 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
     system("pause");
     break;
     }
-
-    case 11: 
+/*
+    case 10: 
     {
     system("cls");
-    cout << "--- BUSQUEDA DE ASIENTO (BINARY SEARCH) ---\n";
+    cout << "--- BUSQUEDA DE ASIENTO (Busqueda Binaria) ---\n";
 
     if (boleteria.estaVacia()) {
         cout << "Lista vacia.\n";
@@ -262,18 +292,21 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
     break;
     }
 
+
     case 12: 
     {
         Voraz::cambioDeMoneda();
         system("pause");
         break;
     }
+*/
 
-    case 13: 
+    case 10: 
     {
         Voraz::asignacionRapida(boleteria);
         break;
     }
+    /*
     case 14:
     {
         system("cls");
@@ -303,8 +336,10 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
         system("pause");
         break;
     }
+    */
 
-    case 15:
+    /*
+    case 11:
     {
         system("cls");
         cout << "--- PROGRAMACION DINAMICA: SIMILITUD DE NOMBRES (LCS) ---\n\n";
@@ -312,8 +347,9 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
         system("pause");
         break;
     }
-
-    case 16:
+*/
+    
+    case 11:
     {
         system("cls");
         cout << "--- BACKTRACKING: COMBINACIONES DE ASIENTOS OCUPADOS ---\n\n";
@@ -321,8 +357,8 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
         system("pause");
         break;
     }
-
-    case 17:
+    
+    case 12:
     {
         system("cls");
         cout << "--- BACKTRACKING: PERMUTACIONES DE NOMBRES DE CLIENTES ---\n\n";
@@ -330,8 +366,6 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
         system("pause");
         break;
     }
-
-
 
     }
 }

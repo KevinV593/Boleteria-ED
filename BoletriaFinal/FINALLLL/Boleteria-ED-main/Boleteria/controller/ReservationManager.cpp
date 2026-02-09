@@ -124,7 +124,6 @@ void ReservationManager::reservarAsiento(ListaCircularDoble &boleteria)
     }
     else
     {
-        cout << "Ingrese el nombre del cliente: ";
         nombre = ingresarNombre();
     }
 
@@ -407,9 +406,7 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
 
     cout << "\n--- PROCESANDO ACTUALIZACIONES PARA: " << nuevoNombre << " (" << nuevaCedula << ") ---\n";
 
-    // ---------------------------------------------------------
-    // PASO 5: ITERAR Y PROCESAR
-    // ---------------------------------------------------------
+    
     for (int i = 0; i < cantidadReservas; i++) 
     {
         Nodo* nodoActual = *(misReservas + i);
@@ -467,7 +464,6 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
             }
         }
 
-        // === FALLBACK: ACTUALIZAR DATOS EN EL ASIENTO ACTUAL ===
         // Se ejecuta si no quiso mover O si el movimiento falló
         if (!cambioExitoso) 
         {

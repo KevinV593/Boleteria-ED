@@ -5,6 +5,8 @@
 #include "../model/ListaCircularDoble.hpp"
 #include "../model/Boleto.hpp"
 #include "../model/Nodo.hpp"
+#include "../utils/hash.hpp" 
+
 
 using namespace std;
 
@@ -57,6 +59,10 @@ public:
         }
 
         out.close();
+
+        string archivoHash = "server/reservas.hash"; 
+        guardarHash(archivo, archivoHash);
+
         return true;
     }
 

@@ -1,65 +1,20 @@
 #include "Dinamica.hpp"
 #include <iostream>
-
+#include <cctype> 
+#include <cstring>  
+#include <algorithm> 
 using namespace std;
 
-/*
-    Mochila 0/1
-    precios  -> costos de entradas (100, 60, 40) Sacasdos de Voraz
-    valores  -> calidad (3, 2, 1)
-    n        -> numero de entradas consideradas
-    capacidad-> presupuesto del cliente
-*/
+//    LCS - Longest Common Subsequence
 
-void Dinamica::mochila01(int* precios, int* valores, int n, int capacidad)
-{
-    int filas = n + 1;
-    int columnas = capacidad + 1;
-
-    int* dp = new int[filas * columnas];
-
-    // Inicializar tabla DP
-    for (int i = 0; i < filas; i++)
-        for (int w = 0; w < columnas; w++)
-            *(dp + i * columnas + w) = 0;
-
-    // Llenar tabla DP
-    for (int i = 1; i <= n; i++) {
-        int precio = *(precios + i - 1);
-        int valor  = *(valores + i - 1);
-
-        for (int w = 0; w <= capacidad; w++) {
-            int sinTomar = *(dp + (i - 1) * columnas + w);
-            int tomar = (precio <= w) ? valor + *(dp + (i - 1) * columnas + (w - precio)) : 0;
-            *(dp + i * columnas + w) = (tomar > sinTomar) ? tomar : sinTomar;
-        }
+string aMinusculas(string cadena) {
+    string nueva = cadena;
+    for (int i = 0; i < nueva.length(); i++) {
+        nueva[i] = tolower(nueva[i]);
     }
-
-    // Nombres de boletos
-    char* nombres[] = { (char*)"PALCO", (char*)"TRIBUNA", (char*)"GENERAL" };
-
-    cout << "--- OPTIMIZACION DE COMPRA DE ENTRADAS ---\n";
-    cout << "Presupuesto: $" << capacidad << endl;
-    cout << "Calidad maxima alcanzable: " << *(dp + n * columnas + capacidad) << endl;
-
-    int w = capacidad;
-    cout << "Entradas seleccionadas:\n";
-    for (int i = n; i > 0; i--) {
-        if (*(dp + i * columnas + w) != *(dp + (i - 1) * columnas + w)) {
-            cout << " - " << *(nombres + i - 1)
-                 << " (precio: " << *(precios + i - 1) 
-                 << ", valor: " << *(valores + i - 1) << ")\n";
-            w -= *(precios + i - 1);
-        }
-    }
-
-    delete[] dp;
+    return nueva;
 }
 
-
-/*
-    LCS - Longest Common Subsequence
-*/
 void Dinamica::lcs(ListaCircularDoble &boleteria)
 {
     system("cls");
@@ -67,69 +22,116 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
 
     Persistencia::cargarReservas(boleteria);
 
-    Nodo* actual = boleteria.getCabeza();
-    if (!actual) {
+    if (boleteria.estaVacia()) {
         cout << "No hay clientes registrados.\n";
+        system("pause");
         return;
     }
 
-    // Mostrar clientes disponibles
-    cout << "Clientes disponibles:\n";
-    Nodo* inicio = actual;
+    cout << "Clientes disponibles para comparar:\n";
+    
+    // Contamos primero cuantos ocupados hay para dimensionar el array temporal
+    int contadorOcupados = 0;
+    Nodo* aux = boleteria.getCabeza();
+    do {
+        if (aux->dato.estaOcupado) contadorOcupados++;
+        aux = aux->siguiente;
+    } while (aux != boleteria.getCabeza());
+
+    if (contadorOcupados == 0) {
+        cout << "No hay asientos ocupados.\n";
+        system("pause");
+        return;
+    }
+
+    // Array dinámico para guardar nombres ya mostrados
+    string* nombresVistos = new string[contadorOcupados];
+    int contadorVistos = 0;
+
+    Nodo* actual = boleteria.getCabeza();
     int idx = 1;
+
     do {
         if (actual->dato.estaOcupado) {
-            cout << " [" << idx << "] " << actual->dato.nombreCliente << "\n";
+            string nombreActual = actual->dato.nombreCliente;
+            bool repetido = false;
+
+            // Verificamos si ya lo mostramos
+            for (int k = 0; k < contadorVistos; k++) {
+                if (nombresVistos[k] == nombreActual) {
+                    repetido = true;
+                    break;
+                }
+            }
+
+            // Si es nuevo, lo mostramos y lo guardamos
+            if (!repetido) {
+                cout << " [" << idx << "] " << nombreActual << "\n";
+                nombresVistos[contadorVistos] = nombreActual;
+                contadorVistos++;
+                idx++;
+            }
         }
         actual = actual->siguiente;
-        idx++;
-    } while (actual != inicio);
+    } while (actual != boleteria.getCabeza());
+    
+    // Liberamos la memoria del filtro visual
+    delete[] nombresVistos; 
 
-    // Pedir nombres a comparar
     char nombre1[100], nombre2[100];
     cout << "\nIngrese primer nombre a comparar: ";
-    cin.ignore();
+    cin.ignore(); // Cuidado: usar solo si venimos de un cin >>
     cin.getline(nombre1, 100);
     cout << "Ingrese segundo nombre a comparar: ";
     cin.getline(nombre2, 100);
 
-    // Validar existencia usando búsqueda por subcadena
     actual = boleteria.getCabeza();
     bool encontrado1 = false, encontrado2 = false;
-    inicio = actual;
+    Nodo* inicio = actual;
+
+    // Convertimos inputs a minúsculas para la búsqueda
+    string n1Str = aMinusculas(string(nombre1));
+    string n2Str = aMinusculas(string(nombre2));
 
     do {
         if (actual->dato.estaOcupado) {
-            std::string cliente = actual->dato.nombreCliente;
+            string cliente = aMinusculas(actual->dato.nombreCliente);
 
-            if (cliente.find(nombre1) != std::string::npos) encontrado1 = true;
-            if (cliente.find(nombre2) != std::string::npos) encontrado2 = true;
+            // Buscamos la subcadena en minúsculas
+            if (cliente.find(n1Str) != string::npos) encontrado1 = true;
+            if (cliente.find(n2Str) != string::npos) encontrado2 = true;
         }
         actual = actual->siguiente;
-    } while (actual != inicio && (!encontrado1 || !encontrado2));
+    } while (actual != inicio);
 
+    // Nota: Si el usuario ingresa nombres que NO están en la lista pero quiere compararlos
+    // entre sí, podríamos quitar esta validación. Pero si es requisito que existan:
     if (!encontrado1 || !encontrado2) {
-        cout << "Uno o ambos nombres no se encontraron en las reservas.\n";
-        return;
+        cout << "ADVERTENCIA: Uno o ambos nombres no coinciden exactamente con la lista.\n";
+        cout << "Se procedera con el calculo de todas formas...\n";
+        // return; // Puedes descomentar si quieres ser estricto
     }
 
-    // Calcular LCS clásico con punteros
     int m = 0, n = 0;
     while (*(nombre1 + m) != '\0') m++;
     while (*(nombre2 + n) != '\0') n++;
 
     int filas = m + 1, columnas = n + 1;
+    
+    // Matriz dinámica linealizada
     int* dp = new int[filas * columnas];
 
-    // Inicializar tabla
-    for (int i = 0; i < filas; i++)
-        for (int j = 0; j < columnas; j++)
-            *(dp + i * columnas + j) = 0;
+    // Inicializar tabla en 0
+    for (int i = 0; i < filas * columnas; i++) *(dp + i) = 0;
 
     // Llenar DP
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
-            if (*(nombre1 + i - 1) == *(nombre2 + j - 1)) {
+            // CORRECCION AQUI: Usamos tolower para comparar caracteres
+            char c1 = tolower(*(nombre1 + i - 1));
+            char c2 = tolower(*(nombre2 + j - 1));
+
+            if (c1 == c2) {
                 *(dp + i * columnas + j) = *(dp + (i - 1) * columnas + (j - 1)) + 1;
             } else {
                 int arriba = *(dp + (i - 1) * columnas + j);
@@ -139,14 +141,18 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
         }
     }
 
-    // Reconstruir subsecuencia
     int len = *(dp + m * columnas + n);
     char* subsecuencia = new char[len + 1];
     subsecuencia[len] = '\0';
 
     int i = m, j = n;
     while (i > 0 && j > 0) {
-        if (*(nombre1 + i - 1) == *(nombre2 + j - 1)) {
+        // Comparación insensible también en el Backtracking
+        char c1 = tolower(*(nombre1 + i - 1));
+        char c2 = tolower(*(nombre2 + j - 1));
+
+        if (c1 == c2) {
+            // Guardamos el caracter original del nombre1 (o nombre2)
             subsecuencia[len - 1] = *(nombre1 + i - 1);
             i--; j--; len--;
         } else if (*(dp + (i - 1) * columnas + j) >= *(dp + i * columnas + (j - 1))) {
@@ -156,10 +162,17 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
         }
     }
 
-    cout << "\nLongitud de la subsecuencia comun mas larga: " 
-         << *(dp + m * columnas + n) << endl;
-    cout << "Subsecuencia comun: " << subsecuencia << endl;
+    cout << "\n----------------RESULTADOS----------------\n";
+    cout << "Nombre 1: " << nombre1 << "\n";
+    cout << "Nombre 2: " << nombre2 << "\n";
+    cout << "Longitud LCS: " << *(dp + m * columnas + n) << endl;
+    cout << "Similitud encontrada: " << subsecuencia << endl;
+
+    // Porcentaje de similitud
+    float porcentaje = (float(*(dp + m * columnas + n)) * 2.0f / (m + n)) * 100.0f;
+    cout << "Porcentaje de coincidencia: " << porcentaje << "%" << endl;
 
     delete[] subsecuencia;
     delete[] dp;
+    
 }

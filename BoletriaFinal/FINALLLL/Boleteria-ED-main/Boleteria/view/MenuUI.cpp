@@ -19,31 +19,17 @@ int MenuUI::mostrarMenuPrincipal()
     cout << "[3] Mostrar Asientos\n";
     cout << "[4] Buscar Reserva\n";
     cout << "[5] Actualizar Reserva\n";
-
     cout << "[6] Ordenar Caracteres de Nombres\n";
     cout << "[7] Ordenar Nombre por Grupos\n";
-
-    cout<< "Exhaustiva:\n";
     cout << "[8] Calcular Ingresos Totales\n";
-    cout << "[9] Busqueda de Cliente por Patron\n";
 
-    cout << "Divide y Venceras:\n";
-    cout << "[10] Ordenar Asientos Ocupados (Merge Sort)\n";
-    cout << "[11] Busqueda de Asiento Ocupado (Busqueda Binaria)\n";
+    cout << "[9] Asientos Ocupados\n";
 
-    cout<< "Algoritmos Voraces:\n";
-    cout << "[12] Cambio (Vuelto) \n";
-    cout << "[13] Asignacion Rapida de Asientos\n";
+    cout << "[10] Asignacion Rapida de Asientos\n";
+    cout << "[11] Generar combinaciones de asientos \n";
+    cout << "[12] Generar permutaciones de nombres \n";
     
-    cout<< "Programacion Dinamica:\n";
-    cout << "[14] Problema de la Mochila (OCC) \n";
-    cout << "[15] Similitud de Nombres (LCS) \n";
-
-    cout<< "Backtracking:\n";
-    cout << "[16] Generar combinaciones de asientos \n";
-    cout << "[17] Generar permutaciones de nombres \n";
-    
-    cout << "\n[18] Salir\n";
+    cout << "\n[13] Salir\n\n";
 
     opcion = ingresarEntero();
     return opcion;
