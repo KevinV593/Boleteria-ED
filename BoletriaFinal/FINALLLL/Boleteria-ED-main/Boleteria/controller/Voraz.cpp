@@ -35,7 +35,7 @@ void Voraz::asignacionRapida(ListaCircularDoble &boleteria) {
     system("cls");
     cout << "--- RESERVA VORAZ (PRIMER DISPONIBLE) ---\n\n";
 
-    // 1. Cargamos datos frescos
+
     Persistencia::cargarReservas(boleteria);
 
     if (boleteria.estaVacia()) {
@@ -44,13 +44,11 @@ void Voraz::asignacionRapida(ListaCircularDoble &boleteria) {
         return;
     }
 
-    // ==========================================================
-    // NUEVO: CONTAR ASIENTOS DISPONIBLES REALES
-    // ==========================================================
+
+    
     int asientosDisponibles = 0;
     Nodo* aux = boleteria.getCabeza();
     
-    // Recorremos la lista para contar los 'false'
     do {
         if (!aux->dato.estaOcupado) {
             asientosDisponibles++;
@@ -58,29 +56,24 @@ void Voraz::asignacionRapida(ListaCircularDoble &boleteria) {
         aux = aux->siguiente;
     } while (aux != boleteria.getCabeza());
 
-    // Caso: Evento lleno
     if (asientosDisponibles == 0) {
         cout << "LO SENTIMOS: El evento esta completamente LLENO (Sold Out).\n";
         system("pause");
         return;
     }
 
-    // Informamos al usuario el límite
     cout << "INFO: Hay " << asientosDisponibles << " asientos libres en este momento.\n\n";
 
-    // ==========================================================
 
     cout << "Ingrese cantidad de asientos a reservar (Max: " << asientosDisponibles << "): ";
     int cantidad = ingresarEntero(); 
 
-    // Validación básica
     if (cantidad <= 0) {
         cout << "Cantidad invalida.\n";
         system("pause");
         return;
     }
 
-    // NUEVO: Validación del límite superior
     if (cantidad > asientosDisponibles) {
         cout << "\nERROR: No puede reservar " << cantidad 
              << " asientos porque solo quedan " << asientosDisponibles << " disponibles.\n";
@@ -88,7 +81,6 @@ void Voraz::asignacionRapida(ListaCircularDoble &boleteria) {
         return;
     }
 
-    // --- EL RESTO DEL CÓDIGO SIGUE IGUAL ---
 
     cout << "Ingrese la cedula del cliente: ";
     string cedula = ingresarCedula();

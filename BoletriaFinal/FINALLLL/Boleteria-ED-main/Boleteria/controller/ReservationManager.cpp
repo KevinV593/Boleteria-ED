@@ -309,9 +309,6 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
     cout << "Ingrese la cedula del cliente a buscar: ";
     string cedulaOriginal = ingresarCedula();
 
-    // ---------------------------------------------------------
-    // PASO 1: CONTAR RESERVAS
-    // ---------------------------------------------------------
     int cantidadReservas = 0;
     Nodo* explorador = boleteria.getCabeza();
     
@@ -329,14 +326,10 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
         return;
     }
 
-    // ---------------------------------------------------------
-    // PASO 2: CREAR ARREGLO DINÁMICO
-    // ---------------------------------------------------------
+   
     Nodo** misReservas = new Nodo*[cantidadReservas];
 
-    // ---------------------------------------------------------
-    // PASO 3: LLENAR EL ARREGLO
-    // ---------------------------------------------------------
+
     explorador = boleteria.getCabeza();
     int indice = 0;
     do {
@@ -358,28 +351,24 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
     }
     cout << "\n";
 
-    // ---------------------------------------------------------
-    // PASO 4: SOLICITAR NUEVOS DATOS (CON VALIDACIÓN DE INTEGRIDAD)
-    // ---------------------------------------------------------
+
     string nuevoNombre = (*misReservas)->dato.nombreCliente;
     string nuevaCedula = (*misReservas)->dato.cedulaCliente;
 
-    // A. CAMBIO DE NOMBRE
     cout << "Desea cambiar el NOMBRE del titular? (1 = Si / 0 = No): ";
     if (ingresarEntero() == 1) {
         nuevoNombre = ingresarNombre();
     }
 
-    // B. CAMBIO DE CÉDULA (Aquí estaba el error de duplicidad)
+
     cout << "Desea cambiar la CEDULA del titular? (1 = Si / 0 = No): ";
     if (ingresarEntero() == 1) {
         cout << "Ingrese la nueva cedula: ";
         string inputCedula = ingresarCedula();
 
-        // VALIDACIÓN CRÍTICA: ¿Esa cédula ya existe en el sistema?
         string nombrePropietario = obtenerNombrePorCedula(boleteria, inputCedula);
 
-        // Si la cédula existe Y el nombre asociado NO es el que estamos intentando poner
+
         if (!nombrePropietario.empty() && nombrePropietario != nuevoNombre) {
             cout << "\n[ALERTA DE INTEGRIDAD] La cedula " << inputCedula 
                  << " ya esta registrada a nombre de: " << nombrePropietario << ".\n";
@@ -399,14 +388,14 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
             }
         } 
         else {
-            // Si la cédula es nueva (nadie la tiene) O es del mismo usuario, procedemos.
+
             nuevaCedula = inputCedula;
         }
     }
 
     cout << "\n--- PROCESANDO ACTUALIZACIONES PARA: " << nuevoNombre << " (" << nuevaCedula << ") ---\n";
 
-    
+
     for (int i = 0; i < cantidadReservas; i++) 
     {
         Nodo* nodoActual = *(misReservas + i);
@@ -421,7 +410,6 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
 
         if (opcionMover == 1) 
         {
-            // === INTENTO DE MOVER ASIENTO ===
             cout << "   Ingrese el NUEVO numero de asiento deseado: ";
             int asientoNuevoID = ingresarEntero();
 
@@ -434,7 +422,7 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
                 cout << "   [ERROR] El asiento " << asientoNuevoID << " ya esta ocupado. Se mantendra el asiento " << asientoViejo << ".\n";
             }
             else {
-                // Intentar reservar el nuevo
+
                 bool reservadoNuevo = ConcurrenciaOCC::actualizarAsiento(
                     asientoNuevoID, 
                     "OCUPADO", 
@@ -464,10 +452,9 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
             }
         }
 
-        // Se ejecuta si no quiso mover O si el movimiento falló
         if (!cambioExitoso) 
         {
-            // VALIDACIÓN ADICIONAL: Verificar si realmente cambiaron los datos para no escribir en vano
+
             if (nodoActual->dato.nombreCliente != nuevoNombre || nodoActual->dato.cedulaCliente != nuevaCedula) 
             {
                 bool actualizado = ConcurrenciaOCC::sobreescribirDatosReserva(
@@ -493,9 +480,6 @@ void ReservationManager::actualizarReserva(ListaCircularDoble &boleteria)
         }
     }
 
-    // ---------------------------------------------------------
-    // PASO 6: LIBERAR MEMORIA
-    // ---------------------------------------------------------
     delete[] misReservas;
 
     Persistencia::cargarReservas(boleteria);

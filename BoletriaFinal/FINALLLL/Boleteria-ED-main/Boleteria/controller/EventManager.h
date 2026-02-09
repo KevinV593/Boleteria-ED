@@ -6,6 +6,5 @@
 class EventManager
 {
 public:
-    // Inicializa la boletería con asientos distribuidos por categoría
     static void inicializarEvento(ListaCircularDoble &boleteria, int totalAsientos);
 };

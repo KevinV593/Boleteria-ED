@@ -44,7 +44,6 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
         return;
     }
 
-    // Array dinámico para guardar nombres ya mostrados
     string* nombresVistos = new string[contadorOcupados];
     int contadorVistos = 0;
 
@@ -56,7 +55,6 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
             string nombreActual = actual->dato.nombreCliente;
             bool repetido = false;
 
-            // Verificamos si ya lo mostramos
             for (int k = 0; k < contadorVistos; k++) {
                 if (nombresVistos[k] == nombreActual) {
                     repetido = true;
@@ -64,7 +62,6 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
                 }
             }
 
-            // Si es nuevo, lo mostramos y lo guardamos
             if (!repetido) {
                 cout << " [" << idx << "] " << nombreActual << "\n";
                 nombresVistos[contadorVistos] = nombreActual;
@@ -75,12 +72,11 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
         actual = actual->siguiente;
     } while (actual != boleteria.getCabeza());
     
-    // Liberamos la memoria del filtro visual
     delete[] nombresVistos; 
 
     char nombre1[100], nombre2[100];
     cout << "\nIngrese primer nombre a comparar: ";
-    cin.ignore(); // Cuidado: usar solo si venimos de un cin >>
+    cin.ignore(); 
     cin.getline(nombre1, 100);
     cout << "Ingrese segundo nombre a comparar: ";
     cin.getline(nombre2, 100);
@@ -89,7 +85,6 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
     bool encontrado1 = false, encontrado2 = false;
     Nodo* inicio = actual;
 
-    // Convertimos inputs a minúsculas para la búsqueda
     string n1Str = aMinusculas(string(nombre1));
     string n2Str = aMinusculas(string(nombre2));
 
@@ -97,19 +92,15 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
         if (actual->dato.estaOcupado) {
             string cliente = aMinusculas(actual->dato.nombreCliente);
 
-            // Buscamos la subcadena en minúsculas
             if (cliente.find(n1Str) != string::npos) encontrado1 = true;
             if (cliente.find(n2Str) != string::npos) encontrado2 = true;
         }
         actual = actual->siguiente;
     } while (actual != inicio);
 
-    // Nota: Si el usuario ingresa nombres que NO están en la lista pero quiere compararlos
-    // entre sí, podríamos quitar esta validación. Pero si es requisito que existan:
     if (!encontrado1 || !encontrado2) {
         cout << "ADVERTENCIA: Uno o ambos nombres no coinciden exactamente con la lista.\n";
         cout << "Se procedera con el calculo de todas formas...\n";
-        // return; // Puedes descomentar si quieres ser estricto
     }
 
     int m = 0, n = 0;
@@ -118,16 +109,13 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
 
     int filas = m + 1, columnas = n + 1;
     
-    // Matriz dinámica linealizada
     int* dp = new int[filas * columnas];
 
-    // Inicializar tabla en 0
     for (int i = 0; i < filas * columnas; i++) *(dp + i) = 0;
 
-    // Llenar DP
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
-            // CORRECCION AQUI: Usamos tolower para comparar caracteres
+
             char c1 = tolower(*(nombre1 + i - 1));
             char c2 = tolower(*(nombre2 + j - 1));
 
@@ -147,12 +135,11 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
 
     int i = m, j = n;
     while (i > 0 && j > 0) {
-        // Comparación insensible también en el Backtracking
+
         char c1 = tolower(*(nombre1 + i - 1));
         char c2 = tolower(*(nombre2 + j - 1));
 
         if (c1 == c2) {
-            // Guardamos el caracter original del nombre1 (o nombre2)
             subsecuencia[len - 1] = *(nombre1 + i - 1);
             i--; j--; len--;
         } else if (*(dp + (i - 1) * columnas + j) >= *(dp + i * columnas + (j - 1))) {
@@ -168,7 +155,6 @@ void Dinamica::lcs(ListaCircularDoble &boleteria)
     cout << "Longitud LCS: " << *(dp + m * columnas + n) << endl;
     cout << "Similitud encontrada: " << subsecuencia << endl;
 
-    // Porcentaje de similitud
     float porcentaje = (float(*(dp + m * columnas + n)) * 2.0f / (m + n)) * 100.0f;
     cout << "Porcentaje de coincidencia: " << porcentaje << "%" << endl;
 

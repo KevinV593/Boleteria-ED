@@ -35,15 +35,14 @@ void MenuController::ejecutar(ListaCircularDoble &boleteria)
         system("pause");
         exit(1); 
     } else {
-        // CASO DE ÉXITO (TODO ESTÁ BIEN)
-        system("color 07"); // <--- AGREGA ESTO: Fondo NEGRO, letras Blancas (Normal)
+
+        system("color 07"); 
         
         cout << "[OK] Integridad verificada correctamente.\n";
         Sleep(1000); 
         system("cls");
     }
 
-    // ... resto del código ...
 
     bool menu = true;
     while (menu)
@@ -175,6 +174,7 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
         Exhaustiva::ingresosTotales(boleteria);
         break; 
     }
+
     /*
     case 9:
     {
@@ -234,120 +234,15 @@ void MenuController::procesarOpcion(int opcion, ListaCircularDoble &boleteria)
     system("pause");
     break;
     }
-/*
-    case 10: 
-    {
-    system("cls");
-    cout << "--- BUSQUEDA DE ASIENTO (Busqueda Binaria) ---\n";
 
-    if (boleteria.estaVacia()) {
-        cout << "Lista vacia.\n";
-        system("pause");
-        break;
-    }
-
-    int contador = 0;
-    Nodo* temp = boleteria.getCabeza();
-    do {
-        if (temp->dato.estaOcupado) contador++;
-        temp = temp->siguiente;
-    } while (temp != boleteria.getCabeza());
-
-    if (contador == 0) {
-        cout << "No hay asientos ocupados para buscar.\n";
-        system("pause");
-        break;
-    }
-
-    int* arregloDinamico = new int[contador];
-
-    temp = boleteria.getCabeza();
-    int i = 0;
-    do {
-        if (temp->dato.estaOcupado) {
-            *(arregloDinamico + i) = temp->dato.numeroAsiento;
-            i++;
-        }
-        temp = temp->siguiente;
-    } while (temp != boleteria.getCabeza());
-
-    DivideYVenceras::mergeSortPunteros(arregloDinamico, 0, contador - 1);
-
-    int objetivo;
-    cout << "Ingrese numero de asiento ocupado a buscar: ";
-    cin >> objetivo;
-
-    int resultadoIndex = DivideYVenceras::binarySearchPunteros(arregloDinamico, 0, contador - 1, objetivo);
-
-    if (resultadoIndex != -1) {
-        cout << "EXITO: El asiento " << objetivo << " esta ocupado y se encuentra en el indice " 
-             << resultadoIndex << " del arreglo temporal.\n";
-    } else {
-        cout << "FALLO: El asiento " << objetivo << " no esta en la lista de ocupados.\n";
-    }
-
-    delete[] arregloDinamico;
-
-    system("pause");
-    break;
-    }
-
-
-    case 12: 
-    {
-        Voraz::cambioDeMoneda();
-        system("pause");
-        break;
-    }
-*/
 
     case 10: 
     {
         Voraz::asignacionRapida(boleteria);
         break;
     }
-    /*
-    case 14:
-    {
-        system("cls");
-        cout << "--- PROGRAMACION DINAMICA: MOCHILA (PRESUPUESTO DE ENTRADAS) ---\n\n";
 
-        cout << "Ingrese el presupuesto disponible: $";
-        int presupuesto = ingresarEntero();
-
-        int n = 3;
-
-        int* precios = new int[n];
-        int* valores = new int[n];
-
-        *(precios + 0) = 100;  
-        *(precios + 1) = 60;   
-        *(precios + 2) = 40;   
-
-        *(valores + 0) = 3;
-        *(valores + 1) = 2;
-        *(valores + 2) = 1;
-
-        Dinamica::mochila01(precios, valores, n, presupuesto);
-
-        delete[] precios;
-        delete[] valores;
-
-        system("pause");
-        break;
-    }
-    */
-
-    /*
-    case 11:
-    {
-        system("cls");
-        cout << "--- PROGRAMACION DINAMICA: SIMILITUD DE NOMBRES (LCS) ---\n\n";
-        Dinamica::lcs(boleteria);
-        system("pause");
-        break;
-    }
-*/
+    
     
     case 11:
     {

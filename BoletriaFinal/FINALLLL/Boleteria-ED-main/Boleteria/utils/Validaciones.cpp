@@ -26,9 +26,6 @@ bool validarEntero(string numero) {
     return true;
 }
 
-// =======================
-// INGRESAR ENTERO
-// =======================
 int ingresarEntero() {
     string numero;
     bool valido = false;
@@ -68,9 +65,7 @@ int ingresarEntero() {
     return atoi(numero.c_str());
 }
 
-// =======================
-// INGRESAR SOLO LETRAS
-// =======================
+
 string ingresarLetra() {
     string p = "";
     int esp = 0;
@@ -110,9 +105,7 @@ string ingresarLetra() {
     return p;
 }
 
-// =======================
-// VALIDAR CÉDULA (ECUATORIANA)
-// =======================
+
 bool validarCedula(const string &cedula) {
     if (cedula.length() != 10) return false;
 
@@ -154,8 +147,6 @@ string ingresarCedula() {
             // Solo dígitos
             else if (isdigit(c)) {
 
-                // OPCIONAL: prevenir escribir más de 10 dígitos
-                // if (cedula.length() >= 10) continue;
 
                 cedula.push_back(c);
                 cout << c;

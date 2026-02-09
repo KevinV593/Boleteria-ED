@@ -16,7 +16,7 @@ private:
         return CreateFileA(
             archivo.c_str(),
             acceso,
-            0,                  // 🚫 NO SHARE → lock real entre procesos
+            0,                  // lock real entre procesos
             nullptr,
             OPEN_ALWAYS,
             FILE_ATTRIBUTE_NORMAL,
@@ -29,7 +29,6 @@ public:
         ListaCircularDoble& lista,
         const string& archivo = "server/reservas.txt"
     ) {
-        // 🔒 lock exclusivo
         HANDLE hFile = abrirArchivoExclusivo(archivo, GENERIC_WRITE);
         if (hFile == INVALID_HANDLE_VALUE) {
             cout << "Otro proceso esta guardando. Operacion cancelada.\n";
@@ -70,7 +69,6 @@ public:
         ListaCircularDoble& lista,
         const string& archivo = "server/reservas.txt"
     ) {
-        // lectura permisiva: se puede leer mientras otro escribe SOLO si no hay lock
         HANDLE hFile = CreateFileA(
             archivo.c_str(),
             GENERIC_READ,

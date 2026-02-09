@@ -4,9 +4,9 @@
 class MenuUI
 {
 public:
-    // Muestra el menú principal y retorna la opción seleccionada
-    static int mostrarMenuPrincipal();
 
-    // Muestra la lista de asientos
-    static void mostrarAsientos(ListaCircularDoble &boleteria);
+static int mostrarMenuPrincipal();
+
+
+static void mostrarAsientos(ListaCircularDoble &boleteria);
 };

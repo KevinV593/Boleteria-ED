@@ -12,14 +12,7 @@ using namespace std;
 
 class ConcurrenciaOCC {
 private:
-    /**
-     * @brief Lee una línea específica del archivo y extrae los datos del asiento
-     * @param archivo Ruta del archivo (default: "server/reservas.txt")
-     * @param numeroAsiento El número del asiento a buscar (línea 1 = asiento 1, línea 2 = asiento 2, etc)
-     * @param estadoActual Referencia a bool que contendrá el estado ocupado/disponible
-     * @param linea Referencia a string que contendrá toda la línea leída
-     * @return true si se leyó correctamente, false si hubo error
-     */
+
     static bool leerLineaDelAsiento(
         const string& archivo,
         int numeroAsiento,
@@ -56,13 +49,6 @@ private:
         return false;
     }
 
-    /**
-     * @brief Escribe una línea modificada en una posición específica del archivo
-     * @param archivo Ruta del archivo
-     * @param numeroAsiento El número del asiento (línea a modificar)
-     * @param lineaNueva La nueva línea completa a escribir
-     * @return true si la escritura fue exitosa, false en caso contrario
-     */
     static bool escribirLineaDelAsiento(
         const string& archivo,
         int numeroAsiento,
@@ -82,14 +68,13 @@ private:
         while (getline(in, linea)) {
             lineaActual++;
             if (lineaActual == numeroAsiento) {
-                lineas.push_back(lineaNueva);  // Reemplazar la línea
+                lineas.push_back(lineaNueva);  
             } else {
                 lineas.push_back(linea);
             }
         }
         in.close();
 
-        // Escribir todo el archivo actualizado
         ofstream out(archivo, ios::trunc);
         if (!out.is_open()) {
             cout << "Error: No se puede escribir en " << archivo << endl;
@@ -107,30 +92,12 @@ private:
 
         string archivoHash = archivo.substr(0, archivo.find_last_of('.')) + ".hash";
         guardarHash(archivo, archivoHash);
-        
+
         return true;
     }
 
 public:
-    /**
-     * @brief Implementa OCC: Lectura → Comparación → Escritura segura para actualizar un asiento
-     * 
-     * ALGORITMO:
-     * 1. RE-LEE la línea del asiento en el archivo (verificación de estado actual)
-     * 2. COMPARA si el asiento sigue "Disponible" (estaOcupado == 0)
-     * 3. Si está disponible → ESCRIBE los cambios inmediatamente
-     * 4. Si NO está disponible → CANCELA, muestra error y devuelve false
-     *
-     * @param idAsiento El número del asiento a actualizar (1-based)
-     * @param nuevoEstado El nuevo estado: "DISPONIBLE" o "OCUPADO" 
-     * @param nombreCliente Nombre del cliente (solo si nuevoEstado == "OCUPADO")
-     * @param cedulaCliente Cédula del cliente (solo si nuevoEstado == "OCUPADO")
-     * @param categoriaAsiento Categoría del asiento (ej: "General", "Tribuna", "Palco")
-     * @param archivo Ruta del archivo (default: "server/reservas.txt")
-     * 
-     * @return true si la actualización fue exitosa
-     * @return false si hubo conflicto (el asiento ya fue ocupado por otro usuario)
-     */
+    
     static bool actualizarAsiento(
         int idAsiento,
         const string& nuevoEstado,
@@ -141,7 +108,7 @@ public:
         const string& horaReserva = "N/A",
         const string& archivo = "server/reservas.txt"
     ) {
-        // ============ PASO 1: RE-LEER ============
+
         bool estadoActualEnArchivo;
         string lineaOriginal;
 

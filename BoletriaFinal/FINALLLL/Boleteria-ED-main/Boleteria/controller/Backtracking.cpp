@@ -81,9 +81,9 @@ void Backtracking::permutacionesNombres(ListaCircularDoble &boleteria) {
     permutaciones(nombresUnicos, contadorUnicos, 0);
 
     for (int i = 0; i < contadorUnicos; i++) {
-        delete nombresUnicos[i]; // Borrar cada string creado
+        delete nombresUnicos[i]; 
     }
-    delete[] nombresUnicos; // Borrar el arreglo de punteros
+    delete[] nombresUnicos; 
 
 }
 

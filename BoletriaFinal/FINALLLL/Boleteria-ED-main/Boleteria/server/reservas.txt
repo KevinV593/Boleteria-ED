@@ -9,7 +9,7 @@
 9;General;N/A;N/A;N/A;N/A;0
 10;General;N/A;N/A;N/A;N/A;0
 11;Tribuna;N/A;N/A;N/A;N/A;0
-12;Tribuna;N/A;N/A;N/A;N/A;0
+12;Tribuna;Keneth;1727324814;09/02/2026;13:10:45;1
 13;Tribuna;Sergio;1754144390;09/02/2026;06:00:03;1
 14;Tribuna;Sergio;1754144390;09/02/2026;10:19:51;1
 15;Tribuna;N/A;N/A;N/A;N/A;0
@@ -17,4 +17,4 @@
 17;Palco;N/A;N/A;N/A;N/A;0
 18;Palco;N/A;N/A;N/A;N/A;0
 19;Palco;N/A;N/A;N/A;N/A;0
-20;Palco;N/A;N/A;N/A;N/A;0
+20;Palco;Ana Perez;1803005071;09/02/2026;13:06:54;1
